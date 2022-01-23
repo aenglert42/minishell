@@ -6,30 +6,31 @@
 /*   By: englot <englot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 08:10:27 by jzhou             #+#    #+#             */
-/*   Updated: 2022/01/24 00:06:56 by englot           ###   ########.fr       */
+/*   Updated: 2022/01/24 00:36:48 by englot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	**static_ft_create_command_array(t_slist *tokens)
+static char	**static_ft_create_command_array(t_slist **tokens)
 {
 	int		count;
 	char	**array;
 	t_slist	*tmp;
 	int		i;
 
-	count = ft_lstsize(tokens);
+	count = ft_lstsize(*tokens);
 	array = malloc((count + 1) * sizeof(char *)); //malloccheck
-	tmp = tokens;
+	tmp = *tokens;
 	i = 0;
 	while (tmp != NULL)
 	{
-		array[i] = tmp->content;
+		array[i] = ft_strdup(tmp->content); //malloccheck
 		i++;
 		tmp = tmp->next;
 	}
 	array[i] = NULL;
+	ft_lstclear(tokens, &ft_del);
 	return (array);
 }
 
@@ -157,5 +158,5 @@ char	**ft_tokenizer(char *str) //gets adress of linked list
 		printf("5[%d]: %s.\n", i, tmp);
 	}
 	static_ft_clean_tokens(&tokens);
-	return (static_ft_create_command_array(tokens));
+	return (static_ft_create_command_array(&tokens));
 }
