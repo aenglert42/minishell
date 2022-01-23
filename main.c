@@ -6,7 +6,7 @@
 /*   By: englot <englot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 08:10:27 by jzhou             #+#    #+#             */
-/*   Updated: 2021/12/22 09:36:47 by englot           ###   ########.fr       */
+/*   Updated: 2022/01/23 19:01:02 by englot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int	main(void)
 		ctrlc(&termi, 0);
 		input = readline(PROMPT);
 		helpermain(input, &data);
-		command = ft_tokenizer(input, &data);
+		command = ft_tokenizer(input);
 		free(input);
 		if (command != NULL)
 		{

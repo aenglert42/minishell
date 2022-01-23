@@ -6,7 +6,7 @@
 /*   By: englot <englot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/30 17:13:45 by aenglert          #+#    #+#             */
-/*   Updated: 2021/12/22 21:42:06 by englot           ###   ########.fr       */
+/*   Updated: 2022/01/23 22:29:19 by englot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ t_slist	*ft_lstlast(t_slist *lst);
 t_slist	*ft_lstmap(t_slist *lst, void *(*f)(void *),
 			void (*del)(void *));
 t_slist	*ft_lstnew(void *content);
+void	ft_lstremovenode(t_slist **lst, t_slist *node_to_remove,
+			void (*del)(void *));
 int		ft_lstsize(t_slist *lst);
 void	*ft_memchr(const void *s, int c, size_t n);
 int		ft_memcmp(const void *s1, const void *s2, size_t n);

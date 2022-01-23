@@ -6,7 +6,7 @@
 #    By: englot <englot@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/05 16:13:22 by aenglert          #+#    #+#              #
-#    Updated: 2021/12/22 21:43:01 by englot           ###   ########.fr        #
+#    Updated: 2022/01/23 21:47:36 by englot           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,6 +35,7 @@ SRCS :=	ft_atoi.c \
 		ft_lstiter.c \
 		ft_lstlast.c \
 		ft_lstnew.c \
+		ft_lstremovenode.c \
 		ft_lstsize.c \
 		ft_memchr.c \
 		ft_memcmp.c \

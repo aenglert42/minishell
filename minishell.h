@@ -6,7 +6,7 @@
 /*   By: englot <englot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 08:34:04 by englot            #+#    #+#             */
-/*   Updated: 2021/12/22 21:21:53 by englot           ###   ########.fr       */
+/*   Updated: 2022/01/23 23:16:30 by englot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@
 //VALUES
 # define NOTDEFINED 127
 # define LINUX_C 130
+# define PIPE 127
 
 //SHELLNAME
 # define SHELL "minishell"
@@ -141,17 +142,7 @@ bool	ft_nonsense(char **command);
 char	*ft_quoteerror(t_data *data);
 
 //1_tokenizer:
-char	**ft_tokenizer(char *input, t_data *data);
-t_slist	*ft_firstrun(char *input, t_data *data);
-char	**ft_allocnospace(char **command);
-char	**ft_erasespace(char **command, char **finalcmd);
-char	**ft_merge_redirect(char **command, t_data *data);
-char	**ft_createcmd(t_slist *tokenlst);
-int		ft_wordcount(char *input);
-int		ft_findsingle(int i, char *input);
-int		ft_finddouble(int i, char *input);
-char	*ft_checkquotes(char *input, t_data *data);
-void	ft_mergeall(char **command, char **finalcmd, int *y, int *mcounter);
+char	**ft_tokenizer(char *str);
 
 //2_expander
 int		ft_expander(char **token, t_data *data);

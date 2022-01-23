@@ -6,7 +6,7 @@
 /*   By: englot <englot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 08:10:27 by jzhou             #+#    #+#             */
-/*   Updated: 2021/12/22 21:23:33 by englot           ###   ########.fr       */
+/*   Updated: 2022/01/24 00:10:47 by englot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ char	**dividecmd(char **command, char **newcmd, int cmdcount)
 	current = 0;
 	while (current < cmdcount)
 	{
-		if (command[current][0] == '|')
+		if (command[current][0] == PIPE)
 			newcmd[current] = NULL;
 		else
 			newcmd[current] = ft_strdup(command[current]);
