@@ -6,7 +6,7 @@
 /*   By: englot <englot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 08:34:04 by englot            #+#    #+#             */
-/*   Updated: 2022/01/26 19:24:39 by englot           ###   ########.fr       */
+/*   Updated: 2022/01/26 19:32:08 by englot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,6 @@
 //PROMPTS
 # define PROMPT "minishell$ "
 # define HEREPROMPT "heredoc > "
-
-extern pid_t	g_lastpid;
 
 typedef enum e_enum
 {

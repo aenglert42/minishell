@@ -6,7 +6,7 @@
 /*   By: englot <englot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 08:20:45 by englot            #+#    #+#             */
-/*   Updated: 2021/12/21 12:24:13 by englot           ###   ########.fr       */
+/*   Updated: 2022/01/26 19:32:15 by englot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ static void	static_ft_wait_processes(t_data *data)
 	while (ptr != NULL)
 	{
 		waitpid(((t_cmd *)ptr->content)->pid, &data->lastexitstatus, 0);
-		g_lastpid = (pid_t)((t_cmd *)ptr->content)->pid;
 		ptr = ptr->next;
 		count++;
 	}

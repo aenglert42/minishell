@@ -6,13 +6,11 @@
 /*   By: englot <englot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 08:10:27 by jzhou             #+#    #+#             */
-/*   Updated: 2022/01/26 19:10:13 by englot           ###   ########.fr       */
+/*   Updated: 2022/01/26 19:32:03 by englot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-pid_t	g_lastpid = 0;
 
 static void	static_ft_copy_environ(t_data *data)
 {
