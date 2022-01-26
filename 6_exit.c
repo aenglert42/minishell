@@ -6,7 +6,7 @@
 /*   By: englot <englot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 08:24:50 by englot            #+#    #+#             */
-/*   Updated: 2021/12/22 21:23:59 by englot           ###   ########.fr       */
+/*   Updated: 2022/01/26 19:23:53 by englot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,14 @@ int	ft_builtin_errormessage(char *builtin, char *message)
 int	ft_errormessage(char *message)
 {
 	ft_printf_stderr("%s: %s\n", SHELL, message);
+	return (EXIT_FAILURE);
+}
+
+int	ft_exit_tokenizer(t_data *data, t_slist **tokens)
+{
+	ft_syntaxerr(data);
+	ft_free_data_struct_content(data);
+	ft_lstclear(tokens, &ft_del);
 	return (EXIT_FAILURE);
 }
 

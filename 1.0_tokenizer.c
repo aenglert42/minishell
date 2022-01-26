@@ -6,7 +6,7 @@
 /*   By: englot <englot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 08:10:27 by jzhou             #+#    #+#             */
-/*   Updated: 2022/01/26 10:07:58 by englot           ###   ########.fr       */
+/*   Updated: 2022/01/26 19:26:03 by englot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,20 +22,12 @@ static int	static_ft_check_syntax_errors(t_slist **tokens, t_data *data)
 		if (ft_strcmp(ptr->content, "<<"))
 		{
 			if (ptr->next == NULL || ft_strcmp(ptr->next->content, "<") || ft_strcmp(ptr->next->content, ">"))
-			{
-				ft_syntaxerr(data);
-				ft_free_data_struct_content(data);
-				return (EXIT_FAILURE);
-			}
+				return (ft_exit_tokenizer(data, tokens));
 		}
 		if (ft_strcmp(ptr->content, ">>"))
 		{
 			if (ptr->next == NULL || ft_strcmp(ptr->next->content, "<") || ft_strcmp(ptr->next->content, ">"))
-			{
-				ft_syntaxerr(data);
-				ft_free_data_struct_content(data);
-				return (EXIT_FAILURE);
-			}
+				return (ft_exit_tokenizer(data, tokens));
 		}
 		ptr = ptr->next;
 	}
@@ -81,24 +73,16 @@ static int	static_ft_clean_tokens(t_slist **tokens, t_data *data) //check triple
 		else if (ft_strcmp(ptr->content, "|"))
 		{
 			if (ptr->next == NULL || ft_strcmp(ptr->next->content, "|"))
-			{
-				ft_syntaxerr(data);
-				ft_free_data_struct_content(data);
-				return (EXIT_FAILURE);
-			}
+				return (ft_exit_tokenizer(data, tokens));
 			((char *)ptr->content)[0] = PIPE;
 		}
 		else if (ft_strcmp(ptr->content, "<"))
 		{
 			if (ptr->next == NULL || ft_strcmp(ptr->next->content, ">"))
-			{
-				ft_syntaxerr(data);
-				ft_free_data_struct_content(data);
-				return (EXIT_FAILURE);
-			}
+				return (ft_exit_tokenizer(data, tokens));
 			if (ft_strcmp(ptr->next->content, "<"))
 			{
-			ft_strappend2(((char **)&ptr->content), "<");
+			ft_strappend2(((char **)&ptr->content), "<"); //malloccheck
 			ft_lstremovenode(tokens, ptr->next, &ft_del);
 			}
 			ptr = ptr->next;
@@ -106,14 +90,10 @@ static int	static_ft_clean_tokens(t_slist **tokens, t_data *data) //check triple
 		else if (ft_strcmp(ptr->content, ">"))
 		{
 			if (ptr->next == NULL || ft_strcmp(ptr->next->content, "<"))
-			{
-				ft_syntaxerr(data);
-				ft_free_data_struct_content(data);
-				return (EXIT_FAILURE);
-			}
+				return (ft_exit_tokenizer(data, tokens));
 			if (ft_strcmp(ptr->next->content, ">"))
 			{
-			ft_strappend2(((char **)&ptr->content), ">");
+			ft_strappend2(((char **)&ptr->content), ">"); //malloccheck
 			ft_lstremovenode(tokens, ptr->next, &ft_del);
 			}
 			ptr = ptr->next;
@@ -191,13 +171,13 @@ char	**ft_tokenizer(char *str, t_data *data)
 			if (i > pos)
 			{
 				tmp = ft_substr(str, pos, i - pos);
-				node = ft_lstnew(tmp);
+				node = ft_lstnew(tmp); //malloccheck
 				ft_lstadd_back(&tokens, node);
 				pos = i;
 			}
 			i += static_ft_step_through_quote(str + i, str[i]);
 			tmp = ft_substr(str, pos, i - pos);
-			node = ft_lstnew(tmp);
+			node = ft_lstnew(tmp); //malloccheck
 			ft_lstadd_back(&tokens, node);
 			pos = i;
 		}
@@ -206,13 +186,13 @@ char	**ft_tokenizer(char *str, t_data *data)
 			if (i > pos)
 			{
 				tmp = ft_substr(str, pos, i - pos);
-				node = ft_lstnew(tmp);
+				node = ft_lstnew(tmp); //malloccheck
 				ft_lstadd_back(&tokens, node);
 				pos = i;
 			}
 			i++;
 			tmp = ft_substr(str, pos, i - pos);
-			node = ft_lstnew(tmp);
+			node = ft_lstnew(tmp); //malloccheck
 			ft_lstadd_back(&tokens, node);
 			pos = i;
 		}
@@ -222,7 +202,7 @@ char	**ft_tokenizer(char *str, t_data *data)
 	if (i > pos)
 	{
 		tmp = ft_substr(str, pos, i - pos);
-		node = ft_lstnew(tmp);
+		node = ft_lstnew(tmp); //malloccheck
 		ft_lstadd_back(&tokens, node);
 	}
 	if (static_ft_clean_tokens(&tokens, data))

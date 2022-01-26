@@ -6,7 +6,7 @@
 /*   By: englot <englot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 15:23:32 by jzhou             #+#    #+#             */
-/*   Updated: 2021/12/21 23:45:32 by englot           ###   ########.fr       */
+/*   Updated: 2022/01/26 19:09:12 by englot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,12 @@ char	**ft_noquotes(char **command, int y, int j, char **finalcmd)
 			finalcmd[y] = ft_erasequotes(command[j], 0, 0);
 		else
 			finalcmd[y] = ft_strdup(command[j]);
+		free(command[y]);
 		y++;
 		j++;
 	}
 	finalcmd[y] = NULL;
+	free(command);
 	return (finalcmd);
 }
 

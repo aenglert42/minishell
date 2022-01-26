@@ -6,7 +6,7 @@
 /*   By: englot <englot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 08:08:06 by englot            #+#    #+#             */
-/*   Updated: 2021/12/21 08:08:07 by englot           ###   ########.fr       */
+/*   Updated: 2022/01/26 11:50:07 by englot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,10 +74,14 @@ static char	*static_ft_convert_to_canonical(char *curpath)
 	{
 		tmp = ft_dlstnew(components[i]);
 		if (tmp == NULL)
+		{
+			free(components);
 			return (ft_error_dlst(&list));
+		}
 		ft_dlstadd_back(&list, tmp);
 		i++;
 	}
+	free(components);
 	static_ft_remove_dots(&list);
 	curpath = static_ft_create_curpath_str(curpath, &list);
 	return (curpath);

@@ -6,7 +6,7 @@
 /*   By: englot <englot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 08:34:04 by englot            #+#    #+#             */
-/*   Updated: 2022/01/26 10:02:49 by englot           ###   ########.fr       */
+/*   Updated: 2022/01/26 19:24:39 by englot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,6 +214,7 @@ int		ft_construct_dir(char **curpath, char *arg);
 
 //errorcleanup
 void	ft_exit_expander(t_slist **slist, char **token, char **myenv);
+int		ft_exit_tokenizer(t_data *data, t_slist **tokens);
 char	*ft_error_dlst(t_dlist **dlist);
 int		ft_builtin_errormessage(char *builtin, char *message);
 int		ft_errormessage(char *message);
