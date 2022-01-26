@@ -6,7 +6,7 @@
 /*   By: englot <englot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 08:34:04 by englot            #+#    #+#             */
-/*   Updated: 2022/01/23 23:16:30 by englot           ###   ########.fr       */
+/*   Updated: 2022/01/26 10:02:49 by englot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@
 
 //VALUES
 # define NOTDEFINED 127
+# define SYNTAX 2
 # define LINUX_C 130
 # define PIPE 127
 
@@ -142,7 +143,7 @@ bool	ft_nonsense(char **command);
 char	*ft_quoteerror(t_data *data);
 
 //1_tokenizer:
-char	**ft_tokenizer(char *str);
+char	**ft_tokenizer(char *str, t_data *data);
 
 //2_expander
 int		ft_expander(char **token, t_data *data);

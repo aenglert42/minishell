@@ -1,18 +1,48 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   1_tokenizer.c                                      :+:      :+:    :+:   */
+/*   1.0_tokenizer.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: englot <englot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 08:10:27 by jzhou             #+#    #+#             */
-/*   Updated: 2022/01/24 00:36:48 by englot           ###   ########.fr       */
+/*   Updated: 2022/01/26 10:07:58 by englot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	**static_ft_create_command_array(t_slist **tokens)
+static int	static_ft_check_syntax_errors(t_slist **tokens, t_data *data)
+{
+	t_slist	*ptr;
+
+	ptr = *tokens;
+	while (ptr != NULL)
+	{
+		if (ft_strcmp(ptr->content, "<<"))
+		{
+			if (ptr->next == NULL || ft_strcmp(ptr->next->content, "<") || ft_strcmp(ptr->next->content, ">"))
+			{
+				ft_syntaxerr(data);
+				ft_free_data_struct_content(data);
+				return (EXIT_FAILURE);
+			}
+		}
+		if (ft_strcmp(ptr->content, ">>"))
+		{
+			if (ptr->next == NULL || ft_strcmp(ptr->next->content, "<") || ft_strcmp(ptr->next->content, ">"))
+			{
+				ft_syntaxerr(data);
+				ft_free_data_struct_content(data);
+				return (EXIT_FAILURE);
+			}
+		}
+		ptr = ptr->next;
+	}
+	return (EXIT_SUCCESS);
+}
+
+static char	**static_ft_create_command_array(t_slist **tokens, t_data *data)
 {
 	int		count;
 	char	**array;
@@ -21,6 +51,8 @@ static char	**static_ft_create_command_array(t_slist **tokens)
 
 	count = ft_lstsize(*tokens);
 	array = malloc((count + 1) * sizeof(char *)); //malloccheck
+	if (array == NULL)
+		ft_exit_errno(data);
 	tmp = *tokens;
 	i = 0;
 	while (tmp != NULL)
@@ -34,7 +66,7 @@ static char	**static_ft_create_command_array(t_slist **tokens)
 	return (array);
 }
 
-static void	static_ft_clean_tokens(t_slist **tokens) //check triple <
+static int	static_ft_clean_tokens(t_slist **tokens, t_data *data) //check triple <
 {
 	t_slist	*ptr;
 
@@ -49,13 +81,21 @@ static void	static_ft_clean_tokens(t_slist **tokens) //check triple <
 		else if (ft_strcmp(ptr->content, "|"))
 		{
 			if (ptr->next == NULL || ft_strcmp(ptr->next->content, "|"))
-				printf("error |\n"); //errorcheck multiple |s
+			{
+				ft_syntaxerr(data);
+				ft_free_data_struct_content(data);
+				return (EXIT_FAILURE);
+			}
 			((char *)ptr->content)[0] = PIPE;
 		}
 		else if (ft_strcmp(ptr->content, "<"))
 		{
-			if (ptr->next == NULL)
-				printf("error <\n"); //errorcheck
+			if (ptr->next == NULL || ft_strcmp(ptr->next->content, ">"))
+			{
+				ft_syntaxerr(data);
+				ft_free_data_struct_content(data);
+				return (EXIT_FAILURE);
+			}
 			if (ft_strcmp(ptr->next->content, "<"))
 			{
 			ft_strappend2(((char **)&ptr->content), "<");
@@ -65,8 +105,12 @@ static void	static_ft_clean_tokens(t_slist **tokens) //check triple <
 		}
 		else if (ft_strcmp(ptr->content, ">"))
 		{
-			if (ptr->next == NULL)
-				printf("error >\n"); //errorcheck
+			if (ptr->next == NULL || ft_strcmp(ptr->next->content, "<"))
+			{
+				ft_syntaxerr(data);
+				ft_free_data_struct_content(data);
+				return (EXIT_FAILURE);
+			}
 			if (ft_strcmp(ptr->next->content, ">"))
 			{
 			ft_strappend2(((char **)&ptr->content), ">");
@@ -77,12 +121,13 @@ static void	static_ft_clean_tokens(t_slist **tokens) //check triple <
 		else
 			ptr = ptr->next;
 	}
-	ptr = *tokens;
-	while (ptr != NULL)
-	{
-		printf("%s\n", (char *)ptr->content);
-		ptr = ptr->next;
-	}
+	// ptr = *tokens;
+	// while (ptr != NULL)
+	// {
+	// 	printf("%s\n", (char *)ptr->content);
+	// 	ptr = ptr->next;
+	// }
+	return (EXIT_SUCCESS);
 }
 
 static int static_ft_step_through_quote(char *str, char quote)
@@ -99,7 +144,33 @@ static int static_ft_step_through_quote(char *str, char quote)
 	return (1);
 }
 
-char	**ft_tokenizer(char *str) //gets adress of linked list
+static bool	static_ft_has_unclosed_quotes(char *str, t_data *data)
+{
+	int	i;
+	char	quote;
+
+	i = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] == '\'' || str[i] == '\"')
+		{
+			quote = str[i];
+			i++;
+			while (str[i] != '\0' && str[i] != quote)
+				i++;
+			if (str[i] == '\0')
+			{
+				data->lastexitstatus = SYNTAX;
+				ft_printf_stderr("%s: Error: unclosed quotes\n", SHELL);
+				return (true);
+			}
+		}
+		i++;
+	}
+	return (false);
+}
+
+char	**ft_tokenizer(char *str, t_data *data)
 {
 	//assumption: str contains only closed quotes
 	int		i;
@@ -107,7 +178,9 @@ char	**ft_tokenizer(char *str) //gets adress of linked list
 	char	*tmp;
 	t_slist *tokens;
 	t_slist	*node;
-	
+
+	if (static_ft_has_unclosed_quotes(str, data))
+		return (NULL);
 	tokens = NULL;
 	i = 0;
 	pos = 0;
@@ -120,14 +193,12 @@ char	**ft_tokenizer(char *str) //gets adress of linked list
 				tmp = ft_substr(str, pos, i - pos);
 				node = ft_lstnew(tmp);
 				ft_lstadd_back(&tokens, node);
-				printf("1[%d]: %s.\n", i, tmp);
 				pos = i;
 			}
 			i += static_ft_step_through_quote(str + i, str[i]);
 			tmp = ft_substr(str, pos, i - pos);
 			node = ft_lstnew(tmp);
 			ft_lstadd_back(&tokens, node);
-			printf("2[%d]: %s.\n", i, tmp);
 			pos = i;
 		}
 		else if (str[i] == ' '|| str[i] == '\t' || str[i] == '|' || str[i] == '<' || str[i] == '>')
@@ -137,14 +208,12 @@ char	**ft_tokenizer(char *str) //gets adress of linked list
 				tmp = ft_substr(str, pos, i - pos);
 				node = ft_lstnew(tmp);
 				ft_lstadd_back(&tokens, node);
-				printf("3[%d]: %s.\n", i, tmp);
 				pos = i;
 			}
 			i++;
 			tmp = ft_substr(str, pos, i - pos);
 			node = ft_lstnew(tmp);
 			ft_lstadd_back(&tokens, node);
-			printf("4[%d]: %s.\n", i, tmp);
 			pos = i;
 		}
 		else
@@ -155,8 +224,10 @@ char	**ft_tokenizer(char *str) //gets adress of linked list
 		tmp = ft_substr(str, pos, i - pos);
 		node = ft_lstnew(tmp);
 		ft_lstadd_back(&tokens, node);
-		printf("5[%d]: %s.\n", i, tmp);
 	}
-	static_ft_clean_tokens(&tokens);
-	return (static_ft_create_command_array(&tokens));
+	if (static_ft_clean_tokens(&tokens, data))
+		return (NULL);
+	if (static_ft_check_syntax_errors(&tokens, data))
+		return (NULL);
+	return (static_ft_create_command_array(&tokens, data));
 }
