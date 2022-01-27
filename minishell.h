@@ -6,7 +6,7 @@
 /*   By: englot <englot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 08:34:04 by englot            #+#    #+#             */
-/*   Updated: 2022/01/26 19:32:08 by englot           ###   ########.fr       */
+/*   Updated: 2022/01/27 21:49:57 by englot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,6 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "libft/includes/libft.h"
-
-// Debugging
-//# define PRINT_HERE() 
-//(printf("In file %s, at line: %d\n", __FILE__, __LINE__))
-//void	ft_print_tokens(char **tokens, char *label);
 
 //CHARSETS
 # define METACHAR " \t\n|<>"
@@ -153,9 +148,7 @@ void	ft_create_part_list(char **token, t_index *index,
 bool	ft_is_valid_char(const char c);
 
 //3_quote removal:
-char	**ft_removeq(char **command);
-char	*ft_erasedoubleq(int *i, char *input);
-char	*ft_erasesingleq(int *i, char *input);
+void	ft_quoteremover(char **command);
 
 //4_parser:
 t_slist	*ft_parser(char **command, t_data *data);
@@ -216,5 +209,12 @@ int		ft_exit_tokenizer(t_data *data, t_slist **tokens);
 char	*ft_error_dlst(t_dlist **dlist);
 int		ft_builtin_errormessage(char *builtin, char *message);
 int		ft_errormessage(char *message);
+
+// Debugging
+# define PRINT_HERE() (printf("In file %s, at line: %d\n", __FILE__, __LINE__))
+void	ft_print_tokens(char **tokens, char *label);
+void	ft_print_tokenlist(t_slist	**tokens);
+void	ft_print_tokenarray(char **tokens);
+void	ft_print_data(t_data *data);
 
 #endif

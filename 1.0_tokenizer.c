@@ -6,7 +6,7 @@
 /*   By: englot <englot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 08:10:27 by jzhou             #+#    #+#             */
-/*   Updated: 2022/01/27 20:09:55 by englot           ###   ########.fr       */
+/*   Updated: 2022/01/27 21:12:33 by englot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ static char	**static_ft_create_command_array(t_slist **tokens, t_data *data)
 	}
 	array[i] = NULL;
 	ft_lstclear(tokens, &ft_del);
+	ft_print_tokenarray(array); //remove
 	return (array);
 }
 
@@ -101,12 +102,7 @@ static int	static_ft_clean_tokens(t_slist **tokens, t_data *data) //check triple
 		else
 			ptr = ptr->next;
 	}
-	ptr = *tokens;
-	while (ptr != NULL)
-	{
-		printf("%s\n", (char *)ptr->content);
-		ptr = ptr->next;
-	}
+	ft_print_tokenlist(tokens); //remove
 	return (EXIT_SUCCESS);
 }
 

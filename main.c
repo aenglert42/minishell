@@ -6,7 +6,7 @@
 /*   By: englot <englot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 08:10:27 by jzhou             #+#    #+#             */
-/*   Updated: 2022/01/26 19:32:03 by englot           ###   ########.fr       */
+/*   Updated: 2022/01/27 21:32:08 by englot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,18 @@ static void	static_ft_copy_environ(t_data *data)
 
 int	handlecmd(char **command, t_data *data)
 {
-	char	**temp;
+//	char	**temp;
 
 	data->commands = NULL;
 	if (ft_expander(command, data))
 		ft_exit(data);
-	temp = ft_removeq(command);
-	data->commands = ft_parser(temp, data);
+	printf("after expander:\n"); //remove
+	ft_print_tokenarray(command); //remove
+//	temp = ft_removeq(command);
+	ft_quoteremover(command);
+	printf("after quoteremove:\n"); //remove
+	ft_print_tokenarray(command); //remove
+	data->commands = ft_parser(command, data);
 	if (data->commands == NULL || ft_emptystruct(data->commands, data))
 		return (-1);
 	data->mypipe[READ] = -1;
@@ -55,7 +60,7 @@ int	handlecmd(char **command, t_data *data)
 	ft_execute(data);
 	return (0);
 }
-//	printf("here comes the command table: \n");
+//	printf("here  the command table: \n");
 //	ft_printsimplecmd(data->commands);
 
 void	helpermain(char *input, t_data *data)
