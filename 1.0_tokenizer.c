@@ -6,7 +6,7 @@
 /*   By: englot <englot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 08:10:27 by jzhou             #+#    #+#             */
-/*   Updated: 2022/01/26 19:26:03 by englot           ###   ########.fr       */
+/*   Updated: 2022/01/27 20:09:55 by englot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,12 +101,12 @@ static int	static_ft_clean_tokens(t_slist **tokens, t_data *data) //check triple
 		else
 			ptr = ptr->next;
 	}
-	// ptr = *tokens;
-	// while (ptr != NULL)
-	// {
-	// 	printf("%s\n", (char *)ptr->content);
-	// 	ptr = ptr->next;
-	// }
+	ptr = *tokens;
+	while (ptr != NULL)
+	{
+		printf("%s\n", (char *)ptr->content);
+		ptr = ptr->next;
+	}
 	return (EXIT_SUCCESS);
 }
 
@@ -150,6 +150,31 @@ static bool	static_ft_has_unclosed_quotes(char *str, t_data *data)
 	return (false);
 }
 
+static t_slist	**static_tokenize_quotes(t_slist **tokenlist, int *i, int *pos, char *str)
+{
+	char	*tmp;
+	t_slist	*node;
+	
+	if (*i > *pos)
+	{
+		tmp = ft_substr(str, *pos, *i - *pos);
+		node = ft_lstnew(tmp); //malloccheck
+		ft_lstadd_back(tokenlist, node);
+		*pos = *i;
+	}
+	*i += static_ft_step_through_quote(str + *i, str[*i]);
+	tmp = ft_substr(str, *pos, *i - *pos);
+	node = ft_lstnew(tmp); //malloccheck
+	ft_lstadd_back(tokenlist, node);
+	*pos = *i;
+	return (tokenlist);
+}
+
+// static void	static_ft_create_token()
+// {
+	
+// }
+
 char	**ft_tokenizer(char *str, t_data *data)
 {
 	//assumption: str contains only closed quotes
@@ -168,18 +193,7 @@ char	**ft_tokenizer(char *str, t_data *data)
 	{
 		if (str[i] == '\'' || str[i] == '\"')
 		{
-			if (i > pos)
-			{
-				tmp = ft_substr(str, pos, i - pos);
-				node = ft_lstnew(tmp); //malloccheck
-				ft_lstadd_back(&tokens, node);
-				pos = i;
-			}
-			i += static_ft_step_through_quote(str + i, str[i]);
-			tmp = ft_substr(str, pos, i - pos);
-			node = ft_lstnew(tmp); //malloccheck
-			ft_lstadd_back(&tokens, node);
-			pos = i;
+			static_tokenize_quotes(&tokens, &i, &pos, str); //NULLcheck
 		}
 		else if (str[i] == ' '|| str[i] == '\t' || str[i] == '|' || str[i] == '<' || str[i] == '>')
 		{
