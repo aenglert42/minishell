@@ -6,7 +6,7 @@
 /*   By: englot <englot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 08:10:27 by jzhou             #+#    #+#             */
-/*   Updated: 2022/01/27 21:12:33 by englot           ###   ########.fr       */
+/*   Updated: 2022/01/27 22:38:32 by englot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,25 +146,25 @@ static bool	static_ft_has_unclosed_quotes(char *str, t_data *data)
 	return (false);
 }
 
-static t_slist	**static_tokenize_quotes(t_slist **tokenlist, int *i, int *pos, char *str)
-{
-	char	*tmp;
-	t_slist	*node;
+// static t_slist	**static_tokenize_quotes(t_slist **tokenlist, int *i, int *pos, char *str)
+// {
+// 	char	*tmp;
+// 	t_slist	*node;
 	
-	if (*i > *pos)
-	{
-		tmp = ft_substr(str, *pos, *i - *pos);
-		node = ft_lstnew(tmp); //malloccheck
-		ft_lstadd_back(tokenlist, node);
-		*pos = *i;
-	}
-	*i += static_ft_step_through_quote(str + *i, str[*i]);
-	tmp = ft_substr(str, *pos, *i - *pos);
-	node = ft_lstnew(tmp); //malloccheck
-	ft_lstadd_back(tokenlist, node);
-	*pos = *i;
-	return (tokenlist);
-}
+// 	if (*i > *pos)
+// 	{
+// 		tmp = ft_substr(str, *pos, *i - *pos);
+// 		node = ft_lstnew(tmp); //malloccheck
+// 		ft_lstadd_back(tokenlist, node);
+// 		*pos = *i;
+// 	}
+// 	*i += static_ft_step_through_quote(str + *i, str[*i]);
+// 	tmp = ft_substr(str, *pos, *i - *pos);
+// 	node = ft_lstnew(tmp); //malloccheck
+// 	ft_lstadd_back(tokenlist, node);
+// 	*pos = *i;
+// 	return (tokenlist);
+// }
 
 // static void	static_ft_create_token()
 // {
@@ -189,7 +189,8 @@ char	**ft_tokenizer(char *str, t_data *data)
 	{
 		if (str[i] == '\'' || str[i] == '\"')
 		{
-			static_tokenize_quotes(&tokens, &i, &pos, str); //NULLcheck
+			i += static_ft_step_through_quote(str + i, str[i]);
+//			static_tokenize_quotes(&tokens, &i, &pos, str); //NULLcheck
 		}
 		else if (str[i] == ' '|| str[i] == '\t' || str[i] == '|' || str[i] == '<' || str[i] == '>')
 		{

@@ -10,7 +10,7 @@ void	ft_print_tokenlist(t_slist	**tokens)
 	i = 0;
 	while (ptr != NULL)
 	{
-		printf("token %d: %s\n", i, (char *)ptr->content);
+		printf("token %d: %s|\n", i, (char *)ptr->content);
 		ptr = ptr->next;
 		i++;
 	}
@@ -24,7 +24,7 @@ void	ft_print_tokenarray(char **tokens)
 	i = 0;
 	while (tokens[i] != NULL)
 	{
-		printf("token %d: %s\n", i, tokens[i]);
+		printf("token %d: %s|\n", i, tokens[i]);
 		i++;
 	}
 }
@@ -44,7 +44,7 @@ void	ft_print_data(t_data *data)
 		i = 0;
 		while (((t_cmd *)commandlist->content)->args[i] != NULL)
 		{
-			printf("arg[%d]: %s\n", i, ((t_cmd *)commandlist->content)->args[i]);
+			printf("arg[%d]: %s|\n", i, ((t_cmd *)commandlist->content)->args[i]);
 			i++;
 		}
 		tmp = ((t_cmd *)commandlist->content)->re;

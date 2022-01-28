@@ -6,7 +6,7 @@
 /*   By: englot <englot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 08:10:27 by jzhou             #+#    #+#             */
-/*   Updated: 2022/01/27 21:32:08 by englot           ###   ########.fr       */
+/*   Updated: 2022/01/27 22:15:28 by englot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ int	handlecmd(char **command, t_data *data)
 	ft_quoteremover(command);
 	printf("after quoteremove:\n"); //remove
 	ft_print_tokenarray(command); //remove
+	printf("__________________________________________________________\n"); //remove
 	data->commands = ft_parser(command, data);
 	if (data->commands == NULL || ft_emptystruct(data->commands, data))
 		return (-1);
