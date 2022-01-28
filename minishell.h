@@ -6,7 +6,7 @@
 /*   By: englot <englot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 08:34:04 by englot            #+#    #+#             */
-/*   Updated: 2022/01/27 21:49:57 by englot           ###   ########.fr       */
+/*   Updated: 2022/01/28 23:44:24 by englot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,8 @@ char	*ft_quoteerror(t_data *data);
 
 //1_tokenizer:
 char	**ft_tokenizer(char *str, t_data *data);
+void	tokenize(char *str, t_data *data, t_slist **tokens);
+int		ft_clean_tokens(t_slist **tokens, t_data *data);
 
 //2_expander
 int		ft_expander(char **token, t_data *data);

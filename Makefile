@@ -6,6 +6,7 @@ FLAGS = -g -Wall -Wextra -Werror
 
 SRC_LIST =	1.0_tokenizer.c \
 			1.1_tokenizer.c \
+			1.2_tokenizer.c \
 			2.0_expander.c \
 			2.1_expander.c \
 			2.2_expander.c \
