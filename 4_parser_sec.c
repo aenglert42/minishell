@@ -6,7 +6,7 @@
 /*   By: englot <englot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 08:10:27 by jzhou             #+#    #+#             */
-/*   Updated: 2022/01/27 20:56:23 by englot           ###   ########.fr       */
+/*   Updated: 2022/01/29 00:35:49 by englot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,23 +95,6 @@ char	**dividecmd(char **command, char **newcmd, int cmdcount)
 	return (newcmd);
 }
 
-static void	static_freedchar(char ***dchar, int count)
-{
-	int	i;
-
-	if (*dchar == NULL)
-		return ;
-	i = 0;
-	while (i <= count)
-	{
-		free((*dchar)[i]);
-		(*dchar)[i] = NULL;
-		i++;
-	}
-	free(*dchar);
-	*dchar = NULL;
-}
-
 //this is the main parser function and create the cmdtable-list
 //1. count the char **command
 //2. replace '|' with NULL function
@@ -135,7 +118,7 @@ t_slist	*ft_parser(char **command, t_data *data)
 	command = NULL;
 	while (pipecount < cmdcount)
 		pipecount += ft_splitdptr(newcmd + pipecount, &cmdtable, data);
-	static_freedchar(&newcmd, cmdcount);
+	parser_freedchar(&newcmd, cmdcount);
 	if (pipecount > 10000)
 	{
 		ft_freepipecount(command, newcmd, cmdtable);
@@ -143,14 +126,3 @@ t_slist	*ft_parser(char **command, t_data *data)
 	}
 	return (cmdtable);
 }
-
-//this function checks if the single struct simplecmd is empty
-/*bool	ft_checkstruct(t_cmd *simplecmd)
-{
-	printf("path: %s\n", simplecmd->path);
-	PRINT_HERE();
-	if (simplecmd->path == NULL && simplecmd->args == NULL && simplecmd->re == NULL)
-		return (true);
-	else
-		return (false);
-}*/

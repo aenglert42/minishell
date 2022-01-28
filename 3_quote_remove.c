@@ -6,7 +6,7 @@
 /*   By: englot <englot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 15:23:32 by jzhou             #+#    #+#             */
-/*   Updated: 2022/01/28 10:30:17 by englot           ###   ########.fr       */
+/*   Updated: 2022/01/29 00:29:51 by englot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,10 @@ static int	static_remove_quotes(char *str, int j)
 	return (j);
 }
 
-void		ft_quoteremover(char **command)
+void	ft_quoteremover(char **command)
 {
 	int	i;
-	int j;
+	int	j;
 
 	i = 0;
 	while (command[i] != NULL)

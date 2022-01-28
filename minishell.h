@@ -6,7 +6,7 @@
 /*   By: englot <englot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 08:34:04 by englot            #+#    #+#             */
-/*   Updated: 2022/01/29 00:26:53 by englot           ###   ########.fr       */
+/*   Updated: 2022/01/29 00:35:43 by englot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,6 +186,7 @@ void	ft_exit_errno(t_data *data);
 void	ft_free_data_struct_content(t_data *data);
 void	freedchar(char ***dchar);
 void	ft_free_commandlist(t_slist **commands);
+void	parser_freedchar(char ***dchar, int count);
 
 //7_signals
 void	ft_sigfunc_here_doc(int sig);

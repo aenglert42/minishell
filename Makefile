@@ -31,6 +31,7 @@ SRC_LIST =	1.0_tokenizer.c \
 			5.4_builtins_utils.c \
 			6_exit.c \
 			6.1_free.c \
+			6.2_error.c \
 			7_signals.c\
 			8_printstuff.c\
 			main.c\

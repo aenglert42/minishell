@@ -1,42 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   6_exit.c                                           :+:      :+:    :+:   */
+/*   6.2_error.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: englot <englot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 08:24:50 by englot            #+#    #+#             */
-/*   Updated: 2022/01/29 00:31:34 by englot           ###   ########.fr       */
+/*   Updated: 2022/01/29 00:34:18 by englot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_exit_tokenizer(t_data *data, t_slist **tokens)
+int	ft_builtin_errormessage(char *builtin, char *message)
 {
-	ft_syntaxerr(data);
-	ft_free_data_struct_content(data);
-	ft_lstclear(tokens, &ft_del);
+	ft_printf_stderr("%s: %s: %s\n", SHELL, builtin, message);
 	return (EXIT_FAILURE);
 }
 
-void	ft_exit_expander(t_slist **slist, char **token, char **myenv)
+int	ft_errormessage(char *message)
 {
-	ft_printf_stderr("%s: Error: %s\n", SHELL, strerror(errno));
-	ft_lstclear(slist, ft_del);
-	free(*token);
-	freedchar(&myenv);
-	exit (EXIT_FAILURE);
+	ft_printf_stderr("%s: %s\n", SHELL, message);
+	return (EXIT_FAILURE);
 }
 
-void	ft_exit(t_data *data)
+char	*ft_error_dlst(t_dlist **dlist)
 {
-	ft_free_data_struct_content(data);
-	exit (EXIT_FAILURE);
-}
-
-void	ft_exit_errno(t_data *data)
-{
-	ft_printf_stderr("%s: %s\n", SHELL, strerror(errno));
-	ft_exit(data);
+	ft_dlstclear(dlist, &ft_dlstdel);
+	return (NULL);
 }

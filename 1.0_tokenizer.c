@@ -6,7 +6,7 @@
 /*   By: englot <englot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 08:10:27 by jzhou             #+#    #+#             */
-/*   Updated: 2022/01/29 00:20:43 by englot           ###   ########.fr       */
+/*   Updated: 2022/01/29 00:29:07 by englot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,14 @@ static int	static_ft_check_syntax_errors(t_slist **tokens, t_data *data)
 	{
 		if (ft_strcmp(ptr->content, "<<"))
 		{
-			if (ptr->next == NULL || ft_strcmp(ptr->next->content, "<") || ft_strcmp(ptr->next->content, ">"))
+			if (ptr->next == NULL || ft_strcmp(ptr->next->content, "<")
+				|| ft_strcmp(ptr->next->content, ">"))
 				return (ft_exit_tokenizer(data, tokens));
 		}
 		if (ft_strcmp(ptr->content, ">>"))
 		{
-			if (ptr->next == NULL || ft_strcmp(ptr->next->content, "<") || ft_strcmp(ptr->next->content, ">"))
+			if (ptr->next == NULL || ft_strcmp(ptr->next->content, "<")
+				|| ft_strcmp(ptr->next->content, ">"))
 				return (ft_exit_tokenizer(data, tokens));
 		}
 		ptr = ptr->next;
@@ -62,7 +64,7 @@ static char	**static_ft_create_command_array(t_slist **tokens, t_data *data)
 
 static bool	static_ft_has_unclosed_quotes(char *str, t_data *data)
 {
-	int	i;
+	int		i;
 	char	quote;
 
 	i = 0;
@@ -89,7 +91,7 @@ static bool	static_ft_has_unclosed_quotes(char *str, t_data *data)
 //assumption: str contains only closed quotes
 char	**ft_tokenizer(char *str, t_data *data)
 {
-	t_slist *tokens;
+	t_slist	*tokens;
 
 	if (static_ft_has_unclosed_quotes(str, data))
 		return (NULL);

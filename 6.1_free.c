@@ -6,7 +6,7 @@
 /*   By: englot <englot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 08:24:45 by englot            #+#    #+#             */
-/*   Updated: 2021/12/22 21:24:19 by englot           ###   ########.fr       */
+/*   Updated: 2022/01/29 00:35:55 by englot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,19 @@ void	ft_free_data_struct_content(t_data *data)
 	ft_free_commandlist(&data->commands);
 }
 
-char	*ft_error_dlst(t_dlist **dlist)
+void	parser_freedchar(char ***dchar, int count)
 {
-	ft_dlstclear(dlist, &ft_dlstdel);
-	return (NULL);
+	int	i;
+
+	if (*dchar == NULL)
+		return ;
+	i = 0;
+	while (i <= count)
+	{
+		free((*dchar)[i]);
+		(*dchar)[i] = NULL;
+		i++;
+	}
+	free(*dchar);
+	*dchar = NULL;
 }
