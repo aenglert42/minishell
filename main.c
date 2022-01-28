@@ -6,7 +6,7 @@
 /*   By: englot <englot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 08:10:27 by jzhou             #+#    #+#             */
-/*   Updated: 2022/01/27 22:15:28 by englot           ###   ########.fr       */
+/*   Updated: 2022/01/29 00:18:56 by englot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,18 +41,10 @@ static void	static_ft_copy_environ(t_data *data)
 
 int	handlecmd(char **command, t_data *data)
 {
-//	char	**temp;
-
 	data->commands = NULL;
 	if (ft_expander(command, data))
 		ft_exit(data);
-	printf("after expander:\n"); //remove
-	ft_print_tokenarray(command); //remove
-//	temp = ft_removeq(command);
 	ft_quoteremover(command);
-	printf("after quoteremove:\n"); //remove
-	ft_print_tokenarray(command); //remove
-	printf("__________________________________________________________\n"); //remove
 	data->commands = ft_parser(command, data);
 	if (data->commands == NULL || ft_emptystruct(data->commands, data))
 		return (-1);
@@ -61,8 +53,6 @@ int	handlecmd(char **command, t_data *data)
 	ft_execute(data);
 	return (0);
 }
-//	printf("here  the command table: \n");
-//	ft_printsimplecmd(data->commands);
 
 void	helpermain(char *input, t_data *data)
 {

@@ -6,7 +6,7 @@
 /*   By: englot <englot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 08:20:45 by englot            #+#    #+#             */
-/*   Updated: 2022/01/27 22:16:34 by englot           ###   ########.fr       */
+/*   Updated: 2022/01/29 00:25:25 by englot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,6 @@ void	ft_execute(t_data *data)
 {
 	if (data->commands == NULL)
 		ft_exit(data);
-	ft_print_data(data); //remove
 	ft_get_heredoc_input(data);
 	data->tmp_fd[0] = dup(STDIN_FILENO);
 	if (data->tmp_fd[0] == -1)

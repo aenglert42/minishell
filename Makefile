@@ -34,7 +34,6 @@ SRC_LIST =	1.0_tokenizer.c \
 			7_signals.c\
 			8_printstuff.c\
 			main.c\
-			debug.c \
 
 LIBFT_PATH = ./libft/
 

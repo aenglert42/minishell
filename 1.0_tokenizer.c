@@ -6,7 +6,7 @@
 /*   By: englot <englot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 08:10:27 by jzhou             #+#    #+#             */
-/*   Updated: 2022/01/28 23:45:51 by englot           ###   ########.fr       */
+/*   Updated: 2022/01/29 00:20:43 by englot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,20 +42,21 @@ static char	**static_ft_create_command_array(t_slist **tokens, t_data *data)
 	int		i;
 
 	count = ft_lstsize(*tokens);
-	array = malloc((count + 1) * sizeof(char *)); //malloccheck
+	array = malloc((count + 1) * sizeof(char *));
 	if (array == NULL)
 		ft_exit_errno(data);
 	tmp = *tokens;
 	i = 0;
 	while (tmp != NULL)
 	{
-		array[i] = ft_strdup(tmp->content); //malloccheck
+		array[i] = ft_strdup(tmp->content);
+		if (array[i] == NULL)
+			ft_exit_errno(data);
 		i++;
 		tmp = tmp->next;
 	}
 	array[i] = NULL;
 	ft_lstclear(tokens, &ft_del);
-	ft_print_tokenarray(array); //remove
 	return (array);
 }
 

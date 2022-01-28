@@ -6,7 +6,7 @@
 /*   By: englot <englot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 08:34:04 by englot            #+#    #+#             */
-/*   Updated: 2022/01/28 23:44:24 by englot           ###   ########.fr       */
+/*   Updated: 2022/01/29 00:26:53 by englot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,10 +213,11 @@ int		ft_builtin_errormessage(char *builtin, char *message);
 int		ft_errormessage(char *message);
 
 // Debugging
-# define PRINT_HERE() (printf("In file %s, at line: %d\n", __FILE__, __LINE__))
-void	ft_print_tokens(char **tokens, char *label);
-void	ft_print_tokenlist(t_slist	**tokens);
-void	ft_print_tokenarray(char **tokens);
-void	ft_print_data(t_data *data);
+// # define PRINT_HERE() 
+// (printf("In file %s, at line: %d\n", __FILE__, __LINE__))
+// void	ft_print_tokens(char **tokens, char *label);
+// void	ft_print_tokenlist(t_slist	**tokens);
+// void	ft_print_tokenarray(char **tokens);
+// void	ft_print_data(t_data *data);
 
 #endif
