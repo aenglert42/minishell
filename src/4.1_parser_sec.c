@@ -6,7 +6,7 @@
 /*   By: englot <englot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 08:10:27 by jzhou             #+#    #+#             */
-/*   Updated: 2022/02/21 21:11:35 by englot           ###   ########.fr       */
+/*   Updated: 2022/02/21 21:32:30 by englot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int	ft_splitdptr(char **command, t_slist **cmdtable, t_data *data)
 	return (cmdcount);
 }
 
-//this function replaces '|' with NULL
+//this function replaces '|' with PIPE
 char	**dividecmd(char **command, char **newcmd, int cmdcount)
 {
 	int		current;
@@ -97,7 +97,7 @@ char	**dividecmd(char **command, char **newcmd, int cmdcount)
 
 //this is the main parser function and create the cmdtable-list
 //1. count the char **command
-//2. replace '|' with NULL function
+//2. replace '|' with PIPE function
 //3. parse the char ** to the node-creator
 t_slist	*ft_parser(char **command, t_data *data)
 {
