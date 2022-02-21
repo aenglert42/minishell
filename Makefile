@@ -2,7 +2,8 @@ NAME := minishell
 SRC_DIR := ./src/
 OBJ_DIR := ./obj/
 HEADER_DIR := ./inc/
-SRCS :=	1.0_tokenizer.c \
+SRCS :=	0_main.c \
+		1.0_tokenizer.c \
 		1.1_tokenizer.c \
 		1.2_tokenizer.c \
 		2.0_expander.c \
@@ -10,14 +11,11 @@ SRCS :=	1.0_tokenizer.c \
 		2.2_expander.c \
 		2.3_expander.c \
 		3_quote_remove.c \
-		4_parser_fst.c \
-		4_parser_sec.c \
-		4_parser_trd.c \
-		4_parser_fth.c \
-		4_syntaxcheck.c \
-		utils1.c \
-		utils2.c \
-		utils3.c \
+		4.0_parser_fst.c \
+		4.1_parser_sec.c \
+		4.2_parser_trd.c \
+		4.3_parser_fth.c \
+		4.4_syntaxcheck.c \
 		5.0_executor.c \
 		5.1_heredoc.c \
 		5.2_childprocesses.c \
@@ -31,8 +29,9 @@ SRCS :=	1.0_tokenizer.c \
 		6.1_free.c \
 		6.2_error.c \
 		7_signals.c\
-		8_printstuff.c\
-		main.c
+		8.0_utils.c \
+		8.1_utils.c \
+		8.2_utils.c
 CC := gcc
 CFLAGS := -g -Wall -Wextra -Werror
 LINK := -I$(HEADER_DIR) -lreadline

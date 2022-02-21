@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: englot <englot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/20 08:10:27 by jzhou             #+#    #+#             */
-/*   Updated: 2022/02/21 20:46:31 by englot           ###   ########.fr       */
+/*   Created: 2022/02/21 20:56:31 by englot            #+#    #+#             */
+/*   Updated: 2022/02/21 20:56:43 by englot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ void	ft_sigfunc_here_doc(int sig)
 	}
 }
 
-//this function write the ^C character to the screen
 void	ctrlc(struct termios *termi, int flag)
 {
 	struct termios	termattr;
@@ -32,7 +31,6 @@ void	ctrlc(struct termios *termi, int flag)
 	tcsetattr(STDIN_FILENO, TCSAFLUSH, &termattr);
 }
 
-//this is the main signal handling for CTRL C & '\'
 void	sighandler(int sig)
 {
 	char	*tmp;
