@@ -1,19 +1,7 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: englot <englot@student.42.fr>              +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2021/07/05 16:13:22 by aenglert          #+#    #+#              #
-#    Updated: 2022/01/23 21:47:36 by englot           ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 NAME := libft.a
 SRC_DIR := ./src/
 OBJ_DIR := ./obj/
-HEADER_DIR := ./includes/
+HEADER_DIR := ./inc/
 SRCS :=	ft_atoi.c \
 		ft_bzero.c \
 		ft_calloc.c \
@@ -74,7 +62,7 @@ SRCS :=	ft_atoi.c \
 		ft_substr.c \
 		ft_tolower.c \
 		ft_toupper.c
-OBJS := $(patsubst $(SRC_DIR)%.c,$(OBJ_DIR)%.o,$(wildcard $(SRC_DIR)*.c))
+OBJS := $(patsubst %.c,$(OBJ_DIR)%.o,$(SRCS))
 HEADERS := $(HEADER_DIR)*.h
 CC := gcc
 CFLAGS := -g -Wall -Werror -Wextra -I$(HEADER_DIR)
@@ -94,20 +82,24 @@ $(NAME): $(OBJ_DIR) $(OBJS) $(HEADERS)
 
 $(OBJ_DIR):
 	@mkdir $(OBJ_DIR)
-	@echo "$(GREEN)creating: object-files: $(NC)\c"
 
-$(OBJ_DIR)%.o: $(SRC_DIR)%.c $(HEADERS)
+$(OBJ_DIR)%.o: $(SRC_DIR)%.c $(HEADERS) ofilemessage
 	@$(CC) $(CFLAGS) -c $< -o $@
 	@echo ".\c"
+
+ofilemessage:
+	@echo "compiling $(NAME)-object-files: \c"
 
 clean:
 	@rm -rf $(OBJS) *.dSYM
 	@echo "$(RED)$(NAME)-object-files deleted$(NC)"
 	@echo "$(RED)$(NAME)-dSYM-files deleted$(NC)"
 
-fclean: clean
+xclean:
 	@rm -f $(NAME)
 	@echo "$(RED)$(NAME) deleted$(NC)"
+
+fclean: clean xclean
 
 re: fclean all
 
@@ -126,5 +118,7 @@ peace:
 	@echo "      \    \`.  /"
 	@echo "       |      |"
 	@echo "       |      |\n"
+
+.INTERMEDIATE: ofilemessage
 
 .PHONY: clean fclean all re
