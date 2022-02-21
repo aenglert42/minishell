@@ -6,11 +6,11 @@
 /*   By: englot <englot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 20:54:28 by englot            #+#    #+#             */
-/*   Updated: 2022/02/21 20:54:33 by englot           ###   ########.fr       */
+/*   Updated: 2022/02/21 21:11:35 by englot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "minishell.h"
 
 static int	static_ft_handle_bigger(t_slist **tokens,
 				t_data *data, t_slist **ptr)

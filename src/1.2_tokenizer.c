@@ -6,11 +6,11 @@
 /*   By: englot <englot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 20:56:10 by englot            #+#    #+#             */
-/*   Updated: 2022/02/21 20:56:12 by englot           ###   ########.fr       */
+/*   Updated: 2022/02/21 21:11:35 by englot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "minishell.h"
 
 static int	static_ft_step_through_quote(char *str, char quote)
 {

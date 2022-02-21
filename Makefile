@@ -34,7 +34,7 @@ SRCS :=	0_main.c \
 		8.2_utils.c
 CC := gcc
 CFLAGS := -g -Wall -Wextra -Werror
-LINK := -I$(HEADER_DIR) -lreadline
+LINK := -lreadline
 OBJS := $(patsubst %.c,$(OBJ_DIR)%.o,$(SRCS))
 HEADERS := $(HEADER_DIR)*.h
 RED := \033[0;31m
@@ -54,14 +54,14 @@ link:
 	@$(MAKE) -C $(LIBFT_DIR)
 
 $(NAME): $(OBJ_DIR) $(OBJS) $(DEPS)
-	@$(CC) $(CFLAGS) $(OBJS) $(LINK) $(LIBFT) -o $@
+	@$(CC) $(CFLAGS) -I$(HEADER_DIR) $(OBJS) $(LINK) $(LIBFT) -o $@
 	@echo "\n$(GREEN)$(NAME) created$(NC)"
 
 $(OBJ_DIR):
 	@mkdir $(OBJ_DIR)
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c $(DEPS) ofilemessage
-	@$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -I$(HEADER_DIR) -c $< -o $@
 	@echo ".\c"
 
 ofilemessage:

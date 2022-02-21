@@ -6,11 +6,11 @@
 /*   By: englot <englot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 08:06:17 by englot            #+#    #+#             */
-/*   Updated: 2022/02/21 20:46:31 by englot           ###   ########.fr       */
+/*   Updated: 2022/02/21 21:11:35 by englot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "minishell.h"
 
 int	ft_execute_builtin(t_slist *cmdlist, t_data *data)
 {

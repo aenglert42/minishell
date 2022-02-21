@@ -65,7 +65,7 @@ SRCS :=	ft_atoi.c \
 OBJS := $(patsubst %.c,$(OBJ_DIR)%.o,$(SRCS))
 HEADERS := $(HEADER_DIR)*.h
 CC := gcc
-CFLAGS := -g -Wall -Werror -Wextra -I$(HEADER_DIR)
+CFLAGS := -g -Wall -Werror -Wextra
 AR := ar
 ARFLAGS := rcs
 RED := \033[0;31m
@@ -84,7 +84,7 @@ $(OBJ_DIR):
 	@mkdir $(OBJ_DIR)
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c $(HEADERS) ofilemessage
-	@$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -I$(HEADER_DIR) -c $< -o $@
 	@echo ".\c"
 
 ofilemessage:

@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   4_parser_trd.c                                     :+:      :+:    :+:   */
+/*   4.2_parser_trd.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: englot <englot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 08:10:27 by jzhou             #+#    #+#             */
-/*   Updated: 2022/02/21 20:46:31 by englot           ###   ########.fr       */
+/*   Updated: 2022/02/21 21:11:35 by englot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "minishell.h"
 
 //this function counts up the number of arguments for mallocing char **args
 int	ft_countargs(char **command, t_data *data, int y, int argscount)

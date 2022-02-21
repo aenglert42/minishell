@@ -6,11 +6,11 @@
 /*   By: englot <englot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 08:16:00 by englot            #+#    #+#             */
-/*   Updated: 2022/02/21 20:46:31 by englot           ###   ########.fr       */
+/*   Updated: 2022/02/21 21:11:35 by englot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "minishell.h"
 
 static char	*static_ft_append_commandname(char *path, char *str)
 {

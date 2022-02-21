@@ -6,11 +6,11 @@
 /*   By: englot <englot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 20:56:31 by englot            #+#    #+#             */
-/*   Updated: 2022/02/21 20:56:43 by englot           ###   ########.fr       */
+/*   Updated: 2022/02/21 21:11:35 by englot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "minishell.h"
 
 void	ft_sigfunc_here_doc(int sig)
 {
