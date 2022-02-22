@@ -6,7 +6,7 @@
 /*   By: englot <englot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 08:03:49 by englot            #+#    #+#             */
-/*   Updated: 2022/02/21 21:11:35 by englot           ###   ########.fr       */
+/*   Updated: 2022/02/22 10:12:54 by englot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ void	ft_create_part_list(char **token, t_index *index,
 			index->i = index->i + 1;
 			while ((*token)[index->i] != '\"' && (*token)[index->i] != '\0')
 				static_ft_start_expansion(token, index, parts, data);
+			index->i = index->i + 1;
 		}
 		else
 			static_ft_start_expansion(token, index, parts, data);
