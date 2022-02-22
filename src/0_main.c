@@ -6,7 +6,7 @@
 /*   By: englot <englot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 20:55:20 by englot            #+#    #+#             */
-/*   Updated: 2022/02/21 21:11:35 by englot           ###   ########.fr       */
+/*   Updated: 2022/02/22 14:44:39 by englot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static void	static_ft_copy_environ(t_data *data)
 		data->myenv = NULL;
 }
 
-int	handlecmd(char **command, t_data *data)
+static int	static_handlecmd(char **command, t_data *data)
 {
 	data->commands = NULL;
 	if (ft_expander(command, data))
@@ -54,7 +54,7 @@ int	handlecmd(char **command, t_data *data)
 	return (0);
 }
 
-void	helpermain(char *input, t_data *data)
+static void	static_helpermain(char *input, t_data *data)
 {
 	if (input == NULL)
 		builtin_exit(data, NULL);
@@ -78,12 +78,12 @@ int	main(void)
 		signal(SIGQUIT, SIG_IGN);
 		ctrlc(&termi, 0);
 		input = readline(PROMPT);
-		helpermain(input, &data);
+		static_helpermain(input, &data);
 		command = ft_tokenizer(input, &data);
 		free(input);
 		if (command != NULL)
 		{
-			if (handlecmd(command, &data) == -1)
+			if (static_handlecmd(command, &data) == -1)
 				continue ;
 		}
 	}
