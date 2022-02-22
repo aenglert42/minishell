@@ -70,6 +70,6 @@ _Screenshot_
 ![grafik](https://user-images.githubusercontent.com/80413516/155032152-f8cb99cd-2bd4-4f81-b52b-8c1698226d9e.png)
 
 ## Notes
-The parser is used from a former teamproject and was coded by @jzhou (https://github.com/AmberLawr).
+The parser is used from a former teamproject and was coded by [jzhou](https://github.com/AmberLawr).
 
 Please note that the external "readline" function can produce some memory leaks. For this exercise I did not care about them.
