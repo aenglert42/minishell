@@ -48,7 +48,88 @@ The following builtins have to be implemented:
 * __exit__ with no options
 
 ## Approach
-Here I will explain, how I approache the problem.
+My approach was to first get an understanding of how the original bash works so that I can reimplement it. For this the [Bash Reference Manual](https://www.gnu.org/software/bash/manual/bash.html) was the most important resource when I had to look up things, I didn't know how they were supposed to work.Only reading the table of contend already gives an idea of the sequence in which things happen and gives a nice overview of its single elements.
+
+The [Definitions](https://www.gnu.org/software/bash/manual/bash.html#Definitions) were super useful. Here you learn what __metacharacters__, __words__, __operators__ and __tokens__ are.
+
+Some of the most important chapters of the manual for this exercise are: [Quoting](https://www.gnu.org/software/bash/manual/bash.html#Quoting), [Pipes](https://www.gnu.org/software/bash/manual/bash.html#Pipelines), [Redirections](https://www.gnu.org/software/bash/manual/bash.html#Redirections), [Executing Commands](https://www.gnu.org/software/bash/manual/bash.html#Executing-Commands) and [Builtins](https://www.gnu.org/software/bash/manual/bash.html#Shell-Builtin-Commands).
+
+In a nutshell when my minishell (which will not be as complex as bash) reads and executes input from the command line it has to do something like this:
+
+* Split the input up into __tokens__ (__words__ and __operators__), via the __metacharacters__, considering the quoting rules.
+* Perform expansions.
+* Parse the expanded __tokens__ into __commands__.
+* Set up redirections, if necessary.
+* Execute the command(s).
+
+From my understanding a shell consists of three main parts: the __lexer__, the __parser__ and the __executor__.
+
+
+#### Lexer
+The __lexer__ (also called __lexical analyzer__ or __tokenizer__) splits the input into __tokens__, using the __metacharacters__.
+
+#### Parser
+The __parser__ processes the tokens and builds a command table for each command. This happens following the shell's grammar. The grammar is written in a format called __Backus-Naur Form__ and looks like [this](https://cmdse.github.io/pages/appendix/bash-grammar.html).
+
+This is pretty confusing. I thought about the following "building blocks" to parse the command table:
+
+__simple command__: executable [argument]*
+
+A simple command is an executable followed by 0 or more arguments.
+
+__input redirection__: < filename
+
+A input redirection is a input operator followed by a filename.
+
+__output redirection__: > filename
+
+A output redirection is a output operator followed by a filename.
+
+__append redirection__: >> filename
+
+A append redirection is a append operator followed by a filename.
+
+__heredoc__: << delimiter
+
+A heredoc is a heredoc operator followed by a delimiter.
+
+__stdin redirection__: [input redirection] / [heredoc]
+
+A stdin redirection is a input redirection or a heredoc.
+
+__stdout redirection__: [output redirection] / [append redirection]
+
+A stdout redirection is a output redirection or a append redirection.
+
+__command__: [simple command] [stdin redirection]* [stdout redirection]*
+
+A command can contain a simple command, 0 or more stdout redirections, 0 or more stdin redirections.
+
+__pipeline__: [command] [ | [command] ]*
+
+A pipeline consisting of a command and 0 or more pipe operators followed by another command.
+
+The order of the "building blocks" themselves does not matter. However the order within them does.
+
+#####Command table
+
+ls
+
+cat Makefile
+
+echo Hello world! > outfile1
+
+< infile  > outfile2 wc -w
+
+| # | executable | list of arguments | list of stdin redirections | list of stdin redirections |
+| :---- | :---- | :---- | :---- | :---- |
+|1|ls|-|-|-|
+|2|cat|Makefile|-|-|
+|3|echo|Hello, world!|-|outfile1|
+|4|wc|-w|infile|outfile2|
+
+#### Executor
+The __executor__ executes the command table. 
 
 ## Prerequisites
 Tested on Ubuntu 20.04.3 LTS
