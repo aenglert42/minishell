@@ -62,18 +62,18 @@ In a nutshell when my minishell (which will not be as complex as bash) reads and
 * Set up redirections, if necessary.
 * Execute the command(s).
 
-From my understanding a shell consists of three main parts: the [_lexer_](#lexer), the [_parser_](#parser) and the [_executor_](#executor).
+From what I learned so far, I decided to devided the shell into three main parts: the [_lexer_](#lexer), the [_parser_](#parser) and the [_executor_](#executor).
 
 
 ### Lexer
-The _lexer_ (also called _lexical analyzer_ or _tokenizer_) splits the input into a list of _tokens_, using the _metacharacters_.
+The _lexer_ (also called _lexical analyzer_ or _tokenizer_) splits the input into a list of _tokens_, using the _metacharacters_ and performs expansions and quoteremoval. 
 
-For example ```<infile grep -v 42 | >> outfile1 wc -l > outfile2 | ls | >outfile3``` will get tokenized to:
+For example ```<$HOMEinfile grep -v 42 | >> outfile1 wc -l > outfile2 | ls | >outfile3 | echo "don't | split"``` will get tokenized to:
 
-```<``` ```infile``` ```grep``` ```-v``` ```42``` ```|``` ```>>``` ```outfile1``` ```wc``` ```-l``` ```>``` ```outfile2``` ```|``` ```ls```
- ```|``` ```>``` ```outfile3```
+```<``` ```/home/infile``` ```grep``` ```-v``` ```42``` ```|``` ```>>``` ```outfile1``` ```wc``` ```-l``` ```>``` ```outfile2``` ```|``` ```ls```
+ ```|``` ```>``` ```outfile3``` ```|``` ```echo``` ```don't | split```
 ### Parser
-The _parser_ processes the tokens and builds a command table for each command. This happens following the shell's grammar. The grammar is written in a format called _Backus-Naur Form_ and looks like [this](https://cmdse.github.io/pages/appendix/bash-grammar.html).
+The _parser_ processes the tokens and creates a command table (a data structure that stores the commands that will be executed). This happens following the shell's grammar. The grammar is written in a format called _Backus-Naur Form_ and looks like [this](https://cmdse.github.io/pages/appendix/bash-grammar.html).
 
 This is pretty confusing. For a better understanding, I tried to write down my own "grammar receips". I used my own words (so it might not be coherent with the original terms):
 
@@ -119,20 +119,19 @@ So the minishell input will have the following format:
 [executable [argument]*] [< filename]* [<< delimiter]* [> filename]* [>> filename]* [| [[executable [argument]*] [< filename]* [<< delimiter]* [> filename]* [>> filename]*]*
 ```
 
-
 ### Command table
 Knowing the grammar, creating the command table from the tokens is easy. Let's try it with our example token list:
 
-```<``` ```infile``` ```grep``` ```-v``` ```42``` ```|``` ```>>``` ```outfile1``` ```wc``` ```-l``` ```>``` ```outfile2``` ```|``` ```ls```
- ```|``` ```>``` ```outfile3```
+```<``` ```/home/infile``` ```grep``` ```-v``` ```42``` ```|``` ```>>``` ```outfile1``` ```wc``` ```-l``` ```>``` ```outfile2``` ```|``` ```ls```
+ ```|``` ```>``` ```outfile3``` ```|``` ```echo``` ```don't | split```
 
 First we search for the pipe operators, as they separate the commands.
 
-```<``` ```infile``` ```grep``` ```-v``` ```42``` ~~```|```~~ ```>>``` ```outfile1``` ```wc``` ```-l``` ```>``` ```outfile2``` ~~```|```~~ ```ls``` ~~```|```~~ ```>``` ```outfile3```
+```<``` ```/home/infile``` ```grep``` ```-v``` ```42``` ~~```|```~~ ```>>``` ```outfile1``` ```wc``` ```-l``` ```>``` ```outfile2``` ~~```|```~~ ```ls``` ~~```|```~~ ```>``` ```outfile3``` ~~```|```~~ ```echo``` ```don't | split```
 
 This will give us the commands:
 
-Command1: ```<``` ```infile``` ```grep``` ```-v``` ```42```
+Command1: ```<``` ```/home/infile``` ```grep``` ```-v``` ```42```
 
 Command2: ```outfile1``` ```wc``` ```-l``` ```>``` ```outfile2```
 
@@ -140,15 +139,19 @@ Command3: ```ls```
 
 Command4: ```>``` ```outfile3```
 
+Command5: ```echo``` ```don't | split```
+
 Within each command we then search for the redirection operators, because we know that the token following a redirection operator is the associated filename/delimiter.
 
-Command1: ~~```<```~~ ~~```infile```~~ ```grep``` ```-v``` ```42```
+Command1: ~~```<```~~ ~~```/home/infile```~~ ```grep``` ```-v``` ```42```
 
 Command2: ~~```>>```~~ ~~```outfile1```~~ ```wc``` ```-l``` ~~```>```~~ ~~```outfile2```~~
 
 Command3: ```ls```
 
 Command4: ~~```>```~~ ~~```outfile3```~~
+
+Command5: ```echo``` ```don't | split```
 
 So what's left is the executable and the arguments. As the arguments follow the executable we now know that the first token that is left is the executable and the rest are the arguments.
 
@@ -160,15 +163,18 @@ Command3: ```ls```
 
 Command4: -
 
+Command5: ```echo``` ```don't | split```
+
 | # | executable | list of arguments | list of stdin redirections | list of stdout redirections |
 | :---- | :---- | :---- | :---- | :---- |
-|Command1|```grep```|```-v``` ```42```|```<infile```|-|
+|Command1|```grep```|```-v``` ```42```|```</home/infile```|-|
 |Command2|```wc```|```-l```|-|```>>outfile1``` ```>outfile2```|
 |Command3|```ls```|-|-|-|
 |Command4|-|-|-|```>outfile3```|
+|Command5|```echo```|```don't | split```|-|-|
 
 ### Executor
-The _executor_ sets up redirections and pipes (if neccesary) and executes the command table. To use ... we can use the execve function
+The _executor_ takes the command table generated by the parser and creates a new process for each command that is not a builtin. If necessary it will create pipes to forward the output of one process to the input of the next one and redirect the standard in- and output.
 
 ## Prerequisites
 Tested on Ubuntu 20.04.3 LTS
@@ -190,6 +196,7 @@ $ ./minishell
 
 ## Resources
 [Bash Reference Manual](https://www.gnu.org/software/bash/manual/bash.html)
+[Code Vault Playlist - Unix Processes in C](https://www.youtube.com/watch?v=cex9XrZCU14&list=PLfqABt5AS4FkW5mOn2Tn9ZZLLDwA3kZUY)
 
 ## Notes
 The parser is used from a former teamproject and was coded by [jzhou](https://github.com/AmberLawr).
