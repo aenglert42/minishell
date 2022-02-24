@@ -50,86 +50,125 @@ The following builtins have to be implemented:
 ## Approach
 My approach was to first get an understanding of how the original bash works so that I can reimplement it. For this the [Bash Reference Manual](https://www.gnu.org/software/bash/manual/bash.html) was the most important resource when I had to look up things, I didn't know how they were supposed to work.Only reading the table of contend already gives an idea of the sequence in which things happen and gives a nice overview of its single elements.
 
-The [Definitions](https://www.gnu.org/software/bash/manual/bash.html#Definitions) were super useful. Here you learn what __metacharacters__, __words__, __operators__ and __tokens__ are.
+The [Definitions](https://www.gnu.org/software/bash/manual/bash.html#Definitions) were super useful. Here you learn what _metacharacters_, _words_, _operators_ and _tokens_ are.
 
 Some of the most important chapters of the manual for this exercise are: [Quoting](https://www.gnu.org/software/bash/manual/bash.html#Quoting), [Pipes](https://www.gnu.org/software/bash/manual/bash.html#Pipelines), [Redirections](https://www.gnu.org/software/bash/manual/bash.html#Redirections), [Executing Commands](https://www.gnu.org/software/bash/manual/bash.html#Executing-Commands) and [Builtins](https://www.gnu.org/software/bash/manual/bash.html#Shell-Builtin-Commands).
 
 In a nutshell when my minishell (which will not be as complex as bash) reads and executes input from the command line it has to do something like this:
 
-* Split the input up into __tokens__ (__words__ and __operators__), via the __metacharacters__, considering the quoting rules.
+* Split the input up into _tokens_ (_words_ and _operators_), via the _metacharacters_, considering the quoting rules.
 * Perform expansions.
-* Parse the expanded __tokens__ into __commands__.
+* Parse the expanded _tokens_ into _commands_.
 * Set up redirections, if necessary.
 * Execute the command(s).
 
-From my understanding a shell consists of three main parts: the __lexer__, the __parser__ and the __executor__.
+From my understanding a shell consists of three main parts: the [_lexer_](#lexer), the [_parser_](#parser) and the [_executor_](#executor).
 
 
-#### Lexer
-The __lexer__ (also called __lexical analyzer__ or __tokenizer__) splits the input into __tokens__, using the __metacharacters__.
+### Lexer
+The _lexer_ (also called _lexical analyzer_ or _tokenizer_) splits the input into a list of _tokens_, using the _metacharacters_.
 
-#### Parser
-The __parser__ processes the tokens and builds a command table for each command. This happens following the shell's grammar. The grammar is written in a format called __Backus-Naur Form__ and looks like [this](https://cmdse.github.io/pages/appendix/bash-grammar.html).
+For example ```<infile grep -v 42 | >> outfile1 wc -l > outfile2 | ls | >outfile3``` will get tokenized to:
 
-This is pretty confusing. I thought about the following "building blocks" to parse the command table:
+```<``` ```infile``` ```grep``` ```-v``` ```42``` ```|``` ```>>``` ```outfile1``` ```wc``` ```-l``` ```>``` ```outfile2``` ```|``` ```ls```
+ ```|``` ```>``` ```outfile3```
+### Parser
+The _parser_ processes the tokens and builds a command table for each command. This happens following the shell's grammar. The grammar is written in a format called _Backus-Naur Form_ and looks like [this](https://cmdse.github.io/pages/appendix/bash-grammar.html).
 
-__simple command__: executable [argument]*
+This is pretty confusing. For a better understanding, I tried to write down my own "grammar receips". I used my own words (so it might not be coherent with the original terms):
 
-A simple command is an executable followed by 0 or more arguments.
+__[simple command]__: ```executable [argument]*```
 
-__input redirection__: < filename
+> A simple command is an executable followed by 0 or more arguments.
 
-A input redirection is a input operator followed by a filename.
+__[input redirection]__: ```< filename```
 
-__output redirection__: > filename
+> A input redirection is a input operator followed by a filename.
 
-A output redirection is a output operator followed by a filename.
+__[output redirection]__: ```> filename```
 
-__append redirection__: >> filename
+> A output redirection is a output operator followed by a filename.
 
-A append redirection is a append operator followed by a filename.
+__[append redirection]__: ```>> filename```
 
-__heredoc__: << delimiter
+> A append redirection is a append operator followed by a filename.
 
-A heredoc is a heredoc operator followed by a delimiter.
+__[heredoc]__: ```<< delimiter```
 
-__stdin redirection__: [input redirection] / [heredoc]
+> A heredoc is a heredoc operator followed by a delimiter.
 
-A stdin redirection is a input redirection or a heredoc.
+__[stdin redirection]__: ```[input redirection]``` / ```[heredoc]```
 
-__stdout redirection__: [output redirection] / [append redirection]
+> A stdin redirection is a input redirection or a heredoc.
 
-A stdout redirection is a output redirection or a append redirection.
+__[stdout redirection]__: ```[output redirection]``` / ```[append redirection]```
 
-__command__: [simple command] [stdin redirection]* [stdout redirection]*
+> A stdout redirection is a output redirection or a append redirection.
 
-A command can contain a simple command, 0 or more stdout redirections, 0 or more stdin redirections.
+__[command]__: ```[simple command]``` ```[stdin redirection]*``` ```[stdout redirection]*```
 
-__pipeline__: [command] [ | [command] ]*
+> A command can contain a simple command, 0 or more stdout redirections, 0 or more stdin redirections. The order of the elements does not matter.
 
-A pipeline consisting of a command and 0 or more pipe operators followed by another command.
+__[pipeline]__: ```[command]``` ```[| [command]]*```
 
-The order of the "building blocks" themselves does not matter. However the order within them does.
+> A pipeline consisting of a command and 0 or more pipe operators followed by another command.
 
-#####Command table
+So the minishell input will have the following format:
 
-ls
+```
+[executable [argument]*] [< filename]* [<< delimiter]* [> filename]* [>> filename]* [| [[executable [argument]*] [< filename]* [<< delimiter]* [> filename]* [>> filename]*]*
+```
 
-cat Makefile
 
-echo Hello world! > outfile1
+### Command table
+Knowing the grammar, creating the command table from the tokens is easy. Let's try it with our example token list:
 
-< infile  > outfile2 wc -w
+```<``` ```infile``` ```grep``` ```-v``` ```42``` ```|``` ```>>``` ```outfile1``` ```wc``` ```-l``` ```>``` ```outfile2``` ```|``` ```ls```
+ ```|``` ```>``` ```outfile3```
 
-| # | executable | list of arguments | list of stdin redirections | list of stdin redirections |
+First we search for the pipe operators, as they separate the commands.
+
+```<``` ```infile``` ```grep``` ```-v``` ```42``` ~~```|```~~ ```>>``` ```outfile1``` ```wc``` ```-l``` ```>``` ```outfile2``` ~~```|```~~ ```ls``` ~~```|```~~ ```>``` ```outfile3```
+
+This will give us the commands:
+
+Command1: ```<``` ```infile``` ```grep``` ```-v``` ```42```
+
+Command2: ```outfile1``` ```wc``` ```-l``` ```>``` ```outfile2```
+
+Command3: ```ls```
+
+Command4: ```>``` ```outfile3```
+
+Within each command we then search for the redirection operators, because we know that the token following a redirection operator is the associated filename/delimiter.
+
+Command1: ~~```<```~~ ~~```infile```~~ ```grep``` ```-v``` ```42```
+
+Command2: ~~```>>```~~ ~~```outfile1```~~ ```wc``` ```-l``` ~~```>```~~ ~~```outfile2```~~
+
+Command3: ```ls```
+
+Command4: ~~```>```~~ ~~```outfile3```~~
+
+So what's left is the executable and the arguments. As the arguments follow the executable we now know that the first token that is left is the executable and the rest are the arguments.
+
+Command1: ```grep``` ```-v``` ```42```
+
+Command2: ```wc``` ```-l```
+
+Command3: ```ls```
+
+Command4: -
+
+| # | executable | list of arguments | list of stdin redirections | list of stdout redirections |
 | :---- | :---- | :---- | :---- | :---- |
-|1|ls|-|-|-|
-|2|cat|Makefile|-|-|
-|3|echo|Hello, world!|-|outfile1|
-|4|wc|-w|infile|outfile2|
+|Command1|```grep```|```-v``` ```42```|```<infile```|-|
+|Command2|```wc```|```-l```|-|```>>outfile1``` ```>outfile2```|
+|Command3|```ls```|-|-|-|
+|Command4|-|-|-|```>outfile3```|
 
-#### Executor
-The __executor__ executes the command table. 
+### Executor
+The _executor_ sets up redirections and pipes (if neccesary) and executes the command table. To use ... we can use the execve function
 
 ## Prerequisites
 Tested on Ubuntu 20.04.3 LTS
