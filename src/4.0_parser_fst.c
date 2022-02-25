@@ -6,7 +6,7 @@
 /*   By: englot <englot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 08:10:27 by jzhou             #+#    #+#             */
-/*   Updated: 2022/02/21 21:11:35 by englot           ###   ########.fr       */
+/*   Updated: 2022/02/25 22:20:35 by englot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 //this function checks if it is a heredoc or a simple in-redirection
 int	ft_inredirect(char **command, int *y, t_cmd *simplecmd, t_data *data)
 {
-	if (ft_strcmp_n("<<", command[*y], 3) == 0)
+	if (ft_strcmp_n("\x1d\x1d", command[*y], 3) == 0)
 	{
 		if (command[*y + 1] == NULL)
 		{
@@ -29,7 +29,7 @@ int	ft_inredirect(char **command, int *y, t_cmd *simplecmd, t_data *data)
 		simplecmd->hasheredoc = true;
 		*y = *y + 2;
 	}
-	else if (ft_strcmp_n("<", command[*y], 2) == 0)
+	else if (ft_strcmp_n("\x1d", command[*y], 2) == 0)
 	{
 		if (command[*y + 1] == NULL)
 		{
@@ -46,7 +46,7 @@ int	ft_inredirect(char **command, int *y, t_cmd *simplecmd, t_data *data)
 //this function checks if it is a append or a out-redirection
 int	ft_outredirect(char **command, int *y, t_cmd *simplecmd, t_data *data)
 {
-	if (ft_strcmp_n(">>", command[*y], 3) == 0)
+	if (ft_strcmp_n("\x1c\x1c", command[*y], 3) == 0)
 	{
 		if (command[*y + 1] == NULL)
 		{
@@ -57,7 +57,7 @@ int	ft_outredirect(char **command, int *y, t_cmd *simplecmd, t_data *data)
 			ft_relstnew(APPEND, ft_strdup(command[*y + 1])));
 		*y = *y + 2;
 	}
-	else if (ft_strcmp_n(">", command[*y], 2) == 0)
+	else if (ft_strcmp_n("\x1c", command[*y], 2) == 0)
 	{
 		if (command[*y + 1] == NULL)
 		{
@@ -74,14 +74,14 @@ int	ft_outredirect(char **command, int *y, t_cmd *simplecmd, t_data *data)
 //this function distinguishes between the in- and out- redirecitons
 int	ft_distinguish(char **command, int *y, t_cmd *simplecmd, t_data *data)
 {
-	if (ft_strcmp_n("<", command[*y], 2) == 0
-		|| ft_strcmp_n("<<", command[*y], 3) == 0)
+	if (ft_strcmp_n("\x1d", command[*y], 2) == 0
+		|| ft_strcmp_n("\x1d\x1d", command[*y], 3) == 0)
 	{
 		if (ft_inredirect(command, y, simplecmd, data) == -1)
 			return (-1);
 	}
-	else if (ft_strcmp_n(">", command[*y], 2) == 0
-		|| ft_strcmp_n(">>", command[*y], 3) == 0)
+	else if (ft_strcmp_n("\x1c", command[*y], 2) == 0
+		|| ft_strcmp_n("\x1c\x1c", command[*y], 3) == 0)
 	{
 		if (ft_outredirect(command, y, simplecmd, data) == -1)
 			return (-1);
@@ -91,10 +91,10 @@ int	ft_distinguish(char **command, int *y, t_cmd *simplecmd, t_data *data)
 
 bool	ft_isredirection(char **command, int *y)
 {
-	if (ft_strcmp_n("<", command[*y], 2) == 0
-		|| ft_strcmp_n("<<", command[*y], 3) == 0
-		|| ft_strcmp_n(">", command[*y], 2) == 0
-		|| ft_strcmp_n(">>", command[*y], 3) == 0)
+	if (ft_strcmp_n("\x1d", command[*y], 2) == 0
+		|| ft_strcmp_n("\x1d\x1d", command[*y], 3) == 0
+		|| ft_strcmp_n("\x1c", command[*y], 2) == 0
+		|| ft_strcmp_n("\x1c\x1c", command[*y], 3) == 0)
 		return (true);
 	else
 		return (false);

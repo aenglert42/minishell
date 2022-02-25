@@ -6,7 +6,7 @@
 /*   By: englot <englot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 20:53:46 by englot            #+#    #+#             */
-/*   Updated: 2022/02/21 21:11:35 by englot           ###   ########.fr       */
+/*   Updated: 2022/02/25 22:01:19 by englot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,32 @@ static int	static_ft_check_syntax_errors(t_slist **tokens, t_data *data)
 	return (EXIT_SUCCESS);
 }
 
+static char	**static_ft_change_redirection_operator_chars(char **array)
+{
+	int	i;
+
+	i = 0;
+	while (array[i] != NULL)
+	{
+		if (ft_strcmp(array[i], "<"))
+			array[i][0] = SMALLER;
+		else if (ft_strcmp(array[i], ">"))
+			array[i][0] = BIGGER;
+		else if (ft_strcmp(array[i], "<<"))
+		{
+			array[i][0] = SMALLER;
+			array[i][1] = SMALLER;
+		}
+		else if (ft_strcmp(array[i], ">>"))
+		{
+			array[i][0] = BIGGER;
+			array[i][1] = BIGGER;
+		}
+		i++;
+	}
+	return (array);
+}
+
 static char	**static_ft_create_command_array(t_slist **tokens, t_data *data)
 {
 	int		count;
@@ -59,7 +85,7 @@ static char	**static_ft_create_command_array(t_slist **tokens, t_data *data)
 	}
 	array[i] = NULL;
 	ft_lstclear(tokens, &ft_del);
-	return (array);
+	return (static_ft_change_redirection_operator_chars(array));
 }
 
 static bool	static_ft_has_unclosed_quotes(char *str, t_data *data)

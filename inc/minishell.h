@@ -6,7 +6,7 @@
 /*   By: englot <englot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 08:34:04 by englot            #+#    #+#             */
-/*   Updated: 2022/02/21 20:52:20 by englot           ###   ########.fr       */
+/*   Updated: 2022/02/25 22:21:20 by englot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@
 # define SYNTAX 2
 # define LINUX_C 130
 # define PIPE 127
+# define SMALLER '\x1d'
+# define BIGGER '\x1c'
 
 //SHELLNAME
 # define SHELL "minishell"
@@ -112,13 +114,11 @@ void	ft_printcharcmd(char **command);
 void	ft_printsimplenode(t_cmd *simplecmd);
 void	ft_printsimplecmd(t_slist *cmdtable);
 
-//utils1.c
+//utils
 void	ft_del(void *content);
 int		ft_strindexrev(const char *str, int c);
 int		ft_strindex(const char *str, int c);
 void	ft_addto_lst(t_slist **lst, char *str);
-
-//utils2.c
 void	ft_delre(char *file);
 void	ft_relstdelone(t_re *re, void (*del)(void *));
 void	ft_relstclear(t_re **re, void (*del)(void *));
