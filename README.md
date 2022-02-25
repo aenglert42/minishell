@@ -31,7 +31,7 @@ About the shell:
 * "$?" should expand to the exit status of the most recently executed foreground pipeline.
 * Singlequoates inhibit all interpretation of a sequence of characters.
 * Doublequotes inhibit all interpretation of a sequence of characters except for environment variables.
-* ```ctrl+c```, ```ctrl+d``` and ```ctrl+\``` should work like in bash.
+* The signals ```ctrl+c```, ```ctrl+d``` and ```ctrl+\``` should work like in bash.
 * '|' pipes the output of a command to the input of the next command.
 * '>' should redirect output.
 * '<' should redirect input.
@@ -188,6 +188,8 @@ Creating the processes is necessary, because to execute the non-builtin executab
 [How to setup pipes](https://www.youtube.com/watch?v=6xbLgZpOBi8&list=PLfqABt5AS4FkW5mOn2Tn9ZZLLDwA3kZUY&index=23)
 
 [How to use the exec family functions](https://www.youtube.com/watch?v=uh2FqejQRk8&list=PLfqABt5AS4FkW5mOn2Tn9ZZLLDwA3kZUY&index=11)
+
+[How to handle signals](https://www.youtube.com/watch?v=5We_HtLlAbs&list=PLfqABt5AS4FkW5mOn2Tn9ZZLLDwA3kZUY&index=16)
 
 ## Prerequisites
 Tested on Ubuntu 20.04.3 LTS
