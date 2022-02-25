@@ -6,7 +6,7 @@
 /*   By: englot <englot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 08:24:50 by englot            #+#    #+#             */
-/*   Updated: 2022/02/21 21:11:35 by englot           ###   ########.fr       */
+/*   Updated: 2022/02/25 22:37:44 by englot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 int	ft_exit_tokenizer(t_data *data, t_slist **tokens)
 {
 	ft_syntaxerr(data);
-	ft_free_data_struct_content(data);
 	ft_lstclear(tokens, &ft_del);
 	return (EXIT_FAILURE);
 }
