@@ -36,7 +36,7 @@ About the shell:
 * '>' should redirect output.
 * '<' should redirect input.
 * ">>" should redirect output with append mode.
-* It should have a basic "heredoc". It doesn’t need to update history or handle expansion.
+* "<<" should redirect input like a basic "heredoc". It doesn’t need to update history or handle expansion.
 
 The following builtins have to be implemented:
 * __echo__ with option -n
@@ -66,55 +66,53 @@ From what I learned so far, I decided to devided the shell into three main parts
 
 
 ### Lexer
-The _lexer_ (also called _lexical analyzer_ or _tokenizer_) splits the input into a list of _tokens_, using the _metacharacters_ and performs expansions and quoteremoval. 
+The lexer (also called _lexical analyzer_ or _tokenizer_) splits the input into a list of _tokens_, using the _metacharacters_ and performs expansions and quoteremoval. 
 
 For example the commandline:
 
-```<$HOMEinfile grep -v 42 | >> outfile1 wc -l > outfile2 | ls | >outfile3 | echo "don't | split"```
+```<<END <$HOMEinfile grep -v 42 | >> outfile1 wc -l > outfile2 | ls | >outfile3 | echo "don't | split"```
 
 will give us the following token list:
 
-```<``` ```/home/infile``` ```grep``` ```-v``` ```42``` ```|``` ```>>``` ```outfile1``` ```wc``` ```-l``` ```>``` ```outfile2``` ```|``` ```ls```
+```<<``` ```END``` ```<``` ```/home/infile``` ```grep``` ```-v``` ```42``` ```|``` ```>>``` ```outfile1``` ```wc``` ```-l``` ```>``` ```outfile2``` ```|``` ```ls```
  ```|``` ```>``` ```outfile3``` ```|``` ```echo``` ```don't | split```
 
+ Note how all the unquoted whitespaces disappeared.
+
 ### Parser
-The _parser_ processes the tokens and creates a command table (a data structure that stores the commands that will be executed). This happens following the shell's grammar. The grammar is written in a format called _Backus-Naur Form_ and looks like [this](https://cmdse.github.io/pages/appendix/bash-grammar.html).
+The parser processes the tokens and creates a command table (a data structure that stores the commands that will be executed). This happens following the shell's grammar. The grammar is written in a format called _Backus-Naur Form_ and looks like [this](https://cmdse.github.io/pages/appendix/bash-grammar.html).
 
 This is pretty confusing. For a better understanding, I tried to write down my own "grammar receips". I used my own words (so it might not be coherent with the original terms):
 
-__[simple command]__: ```executable [argument]*```
+__[simple command]__ = [executable [argument]*]
 
 > A simple command is an executable followed by 0 or more arguments.
 
-__[input redirection]__: ```< filename```
+__[input redirection]__ = [<filename]
 
 > A input redirection is a input operator followed by a filename.
 
-__[output redirection]__: ```> filename```
+__[output redirection]__ = [>filename]
 
 > A output redirection is a output operator followed by a filename.
 
-__[append redirection]__: ```>> filename```
+__[append redirection]__ = [>>filename]
 
 > A append redirection is a append operator followed by a filename.
 
-__[heredoc]__: ```<< delimiter```
+__[heredoc]__ = [<<delimiter]
 
 > A heredoc is a heredoc operator followed by a delimiter.
 
-__[stdin redirection]__: ```[input redirection]``` / ```[heredoc]```
+__[redirection]__ = [[input redirection] / [output redirection] / [append redirection] / [heredoc]]
 
-> A stdin redirection is a input redirection or a heredoc.
+> A redirection is a input redirection or an outout redirection or an append redirection or a heredoc.
 
-__[stdout redirection]__: ```[output redirection]``` / ```[append redirection]```
+__[command]__ = [[simple command] [redirection]*]
 
-> A stdout redirection is a output redirection or a append redirection.
+> A command can contain a simple command and 0 or more redirections. The order of the elements does not matter.
 
-__[command]__: ```[simple command]``` ```[stdin redirection]*``` ```[stdout redirection]*```
-
-> A command can contain a simple command, 0 or more stdout redirections, 0 or more stdin redirections. The order of the elements does not matter.
-
-__[pipeline]__: ```[command]``` ```[| [command]]*```
+__[pipeline]__ = [[command]] [[| [command]]*]
 
 > A pipeline consisting of a command and 0 or more pipe operators followed by another command.
 
@@ -127,16 +125,16 @@ So the minishell input will have the following format:
 ### Command table
 Knowing the grammar, creating the command table from the tokens is easy. Let's try it with our example token list:
 
-```<``` ```/home/infile``` ```grep``` ```-v``` ```42``` ```|``` ```>>``` ```outfile1``` ```wc``` ```-l``` ```>``` ```outfile2``` ```|``` ```ls```
+```<<``` ```END``` ```<``` ```/home/infile``` ```grep``` ```-v``` ```42``` ```|``` ```>>``` ```outfile1``` ```wc``` ```-l``` ```>``` ```outfile2``` ```|``` ```ls```
  ```|``` ```>``` ```outfile3``` ```|``` ```echo``` ```don't | split```
 
 First we search for the pipe operators, as they separate the commands.
 
-```<``` ```/home/infile``` ```grep``` ```-v``` ```42``` ~~```|```~~ ```>>``` ```outfile1``` ```wc``` ```-l``` ```>``` ```outfile2``` ~~```|```~~ ```ls``` ~~```|```~~ ```>``` ```outfile3``` ~~```|```~~ ```echo``` ```don't | split```
+```<<``` ```END``` ```<``` ```/home/infile``` ```grep``` ```-v``` ```42``` ~~```|```~~ ```>>``` ```outfile1``` ```wc``` ```-l``` ```>``` ```outfile2``` ~~```|```~~ ```ls``` ~~```|```~~ ```>``` ```outfile3``` ~~```|```~~ ```echo``` ```don't | split```
 
 This will give us the commands:
 
-Command1: ```<``` ```/home/infile``` ```grep``` ```-v``` ```42```
+Command1: ```<<``` ```END``` ```<``` ```/home/infile``` ```grep``` ```-v``` ```42```
 
 Command2: ```outfile1``` ```wc``` ```-l``` ```>``` ```outfile2```
 
@@ -148,7 +146,7 @@ Command5: ```echo``` ```don't | split```
 
 Within each command we then search for the redirection operators, because we know that the token following a redirection operator is the associated filename/delimiter.
 
-Command1: ~~```<```~~ ~~```/home/infile```~~ ```grep``` ```-v``` ```42```
+Command1: ~~```<<```~~ ~~```END```~~ ~~```<```~~ ~~```/home/infile```~~ ```grep``` ```-v``` ```42```
 
 Command2: ~~```>>```~~ ~~```outfile1```~~ ```wc``` ```-l``` ~~```>```~~ ~~```outfile2```~~
 
@@ -172,14 +170,22 @@ Command5: ```echo``` ```don't | split```
 
 | # | executable | list of arguments | list of stdin redirections | list of stdout redirections |
 | :---- | :---- | :---- | :---- | :---- |
-|Command1|```grep```|```-v``` ```42```|```</home/infile```|-|
+|Command1|```grep```|```-v``` ```42```|```<<END``` ```</home/infile```|-|
 |Command2|```wc```|```-l```|-|```>>outfile1``` ```>outfile2```|
 |Command3|```ls```|-|-|-|
 |Command4|-|-|-|```>outfile3```|
 |Command5|```echo```|```don't \| split```|-|-|
 
 ### Executor
-The _executor_ takes the command table generated by the parser and creates a new process for each command that is not a builtin. If necessary it will create pipes to forward the output of one process to the input of the next one and redirect the standard in- and output.
+The executor takes the command table generated by the parser and creates a new process for each command that is not a builtin. If necessary it will create pipes to forward the output of one process to the input of the next one and redirect the standard in- and output.
+
+Creating the processes is necessary, because to execute the non-builtin executables, we will use the _execve_ function, that basically overrides all following code by the code of the executable.This means after the first successful _execve_ call the entire program would end. Calling it in a child process will only end that, while the parent process goes on.
+
+[How to fork a process](https://www.youtube.com/watch?v=cex9XrZCU14&list=PLfqABt5AS4FkW5mOn2Tn9ZZLLDwA3kZUY&index=1)
+
+[How to setup pipes](https://www.youtube.com/watch?v=6xbLgZpOBi8&list=PLfqABt5AS4FkW5mOn2Tn9ZZLLDwA3kZUY&index=23)
+
+[How to use the exec family functions](https://www.youtube.com/watch?v=uh2FqejQRk8&list=PLfqABt5AS4FkW5mOn2Tn9ZZLLDwA3kZUY&index=11)
 
 ## Prerequisites
 Tested on Ubuntu 20.04.3 LTS
