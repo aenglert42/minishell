@@ -112,7 +112,7 @@ __[command]__ = [[simple command] [redirection]*]
 
 > A command can contain a simple command and 0 or more redirections. The order of the elements does not matter.
 
-__[pipeline]__ = [[command]] [[| [command]]*]
+__[pipeline]__ = [[command]] [ | [command]]*]
 
 > A pipeline consisting of a command and 0 or more pipe operators followed by another command.
 
