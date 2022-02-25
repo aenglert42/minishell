@@ -13,6 +13,7 @@ The aim of this project is to create a simple shell, to learn about processes, f
 * [Notes](#notes)
 
 ## Introduction
+###### <p align="right">Next: [Approach](#approach)&emsp;&emsp;[[Contents](#table-of-contents)]</p>
 ### Allowed functions
 readline, rl_clear_history, rl_on_new_line, rl_replace_line, rl_redisplay, add_history, printf, malloc, free, write, access, open, read, close, fork, wait, waitpid, wait3, wait4, signal,
 sigaction, kill, exit, getcwd, chdir, stat, lstat, fstat, unlink, execve, dup, dup2, pipe, opendir, readdir, closedir, strerror, perror, isatty, ttyname, ttyslot, ioctl, getenv, tcsetattr,
@@ -48,6 +49,7 @@ The following builtins have to be implemented:
 * __exit__ with no options
 
 ## Approach
+###### <p align="right">Next: [Prerequisites](#prerequisites)&emsp;Previous: [Introduction](#introduction)&emsp;&emsp;[[Contents](#table-of-contents)]</p>
 My approach was to first get an understanding of how the original bash works so that I can reimplement it. For this the [Bash Reference Manual](https://www.gnu.org/software/bash/manual/bash.html) was the most important resource when I had to look up things, I didn't know how they were supposed to work.Only reading the table of contend already gives an idea of the sequence in which things happen and gives a nice overview of its single elements.
 
 The [Definitions](https://www.gnu.org/software/bash/manual/bash.html#Definitions) were super useful. Here you learn what _metacharacters_, _words_, _operators_ and _tokens_ are.
@@ -192,12 +194,14 @@ Creating the processes is necessary, because to execute the non-builtin executab
 [How to handle signals](https://www.youtube.com/watch?v=5We_HtLlAbs&list=PLfqABt5AS4FkW5mOn2Tn9ZZLLDwA3kZUY&index=16)
 
 ## Prerequisites
+###### <p align="right">Next: [How to launch](#how-to-launch)&emsp;Previous: [Approach](#approach)&emsp;&emsp;[[Contents](#table-of-contents)]</p>
 Tested on Ubuntu 20.04.3 LTS
 * gcc (```sudo apt-get install gcc```)
 * make (```sudo apt-get install make```)
 * readline (```$ sudo apt-get install lib32readline8 lib32readline-dev```)
 
 ## How to launch
+###### <p align="right">Next: [Example](#example)&emsp;Previous: [Prerequisites](#prerequisites)&emsp;&emsp;[[Contents](#table-of-contents)]</p>
 Compile the program via the Makefile by using ```$ make``` in the root directory of the repository.
 
 Run it like this:
@@ -207,14 +211,17 @@ $ ./minishell
 ```
 
 ## Example
+###### <p align="right">Next: [Resources](#resources)&emsp;Previous: [How to launch](#how-to-launch)&emsp;&emsp;[[Contents](#table-of-contents)]</p>
 ![minishell](https://user-images.githubusercontent.com/80413516/155508179-96505e8a-92f6-46e7-8c57-3d346b9782eb.gif)
 
 ## Resources
+###### <p align="right">Next: [Notes](#notes)&emsp;Previous: [Example](#example)&emsp;&emsp;[[Contents](#table-of-contents)]</p>
 [Bash Reference Manual](https://www.gnu.org/software/bash/manual/bash.html)
 
 [Code Vault Playlist - Unix Processes in C](https://www.youtube.com/watch?v=cex9XrZCU14&list=PLfqABt5AS4FkW5mOn2Tn9ZZLLDwA3kZUY)
 
 ## Notes
+###### <p align="right">Previous: [Resources](#resources)&emsp;&emsp;[[Contents](#table-of-contents)]</p>
 The parser is used from a former teamproject and was coded by [jzhou](https://github.com/AmberLawr).
 
 Please note that the external "readline" function can produce some memory leaks. For this exercise I did not care about them.
