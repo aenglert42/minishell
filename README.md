@@ -125,7 +125,7 @@ So the minishell input will have the following format:
 ```
 
 ### Command table
-Knowing the grammar, creating the command table from the tokens is easy. Let's try it with our example token list:
+Knowing the grammar, creating the command table from the tokens is easy. Let's try it with our example token list from [above](#lexer):
 
 ```<<``` ```END``` ```<``` ```/home/infile``` ```grep``` ```-v``` ```42``` ```|``` ```>>``` ```outfile1``` ```wc``` ```-l``` ```>``` ```outfile2``` ```|``` ```ls```
  ```|``` ```>``` ```outfile3``` ```|``` ```echo``` ```don't | split```
