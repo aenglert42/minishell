@@ -82,11 +82,13 @@ will give us the following token list:
  Note how all the unquoted whitespaces disappeared.
 
 ### Parser
-The parser processes the tokens and creates a command table (a data structure that stores the commands that will be executed). This happens following the shell's grammar. The grammar is written in a format called _Backus-Naur Form_ and looks like [this](https://cmdse.github.io/pages/appendix/bash-grammar.html).
+The parser processes the tokens and creates a command table (a data structure that stores the commands that will be executed). This happens following the shell's grammar. The grammar is written in a format called _Backus-Naur Form_ (or BNF) and looks like [this](https://cmdse.github.io/pages/appendix/bash-grammar.html). The grammar determines the structure of a language and is necessary to make sense out of a sequence of words that form a frase (or in our case the commandline input). For example you can bring the following words in order, so that they form a sentence, using English grammar: the, blue, is, table. The table is blue.
 
-This is pretty confusing. For a better understanding, I tried to write down my own "grammar receips". I used my own words (so it might not be coherent with the original terms):
+The _Backus-Naur Form_ consists of a set of rules. Each rule has two parts: a _name_ (you can look at it as a "building block") on the left and an the _expansion of the name_ (you can look at it as a "blueprint" for the building block) on the right.
 
-__[simple command]__ = [executable [argument]*]
+This is pretty confusing. For a better understanding, I tried to write down my own "grammar receips". I used my own words (so it might not be coherent with the original terms). I use squarebrackets ```[ ]``` to represent a "container", ```/```(= "or") to seperate options and ```*``` to show that the container it is attached to is optional, but can also occure more than once. Below the rule I wrote down how I would read it out in English:
+
+</br>__[simple command]__ = [executable [argument]*]
 
 > A simple command is an executable followed by 0 or more arguments.
 
