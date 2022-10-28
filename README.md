@@ -200,16 +200,16 @@ Creating the processes is necessary, because to execute the non-builtin executab
 Tested on Ubuntu 20.04.3 LTS
 * gcc (```sudo apt-get install gcc```)
 * make (```sudo apt-get install make```)
-* readline (```$ sudo apt-get install lib32readline8 lib32readline-dev```)
+* readline (```sudo apt-get install lib32readline8 lib32readline-dev```)
 
 ## How to launch
 ###### <p align="right">Next: [Example](#example)&emsp;Previous: [Prerequisites](#prerequisites)&emsp;&emsp;[[Contents](#table-of-contents)]</p>
-Compile the program via the Makefile by using ```$ make``` in the root directory of the repository.
+Compile the program via the Makefile by using ```make``` in the root directory of the repository.
 
 Run it like this:
 
 ```
-$ ./minishell
+./minishell
 ```
 
 ## Example
